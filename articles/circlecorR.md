@@ -221,8 +221,9 @@ corr_wheel_schemes()
   for categories, with a blue-to-warm diverging scale.
 - `"vivid"` – a brighter, higher-contrast categorical palette, still
   paired with the blue-white-red diverging scale.
-- `"alimetry"` – blues alternating with warm golds, with a matching
-  blue-to-yellow diverging scale.
+- `"alimetry"` – black and shades of blue through cyan for most
+  categories, with a single gold used as a sparing highlight, and a
+  matching blue-to-yellow diverging scale.
 
 ``` r
 
