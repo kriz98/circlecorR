@@ -43,10 +43,8 @@ consistent and more powerful than adjusting across the full matrix. See the
 \code{adjust} and \code{hide_within_group} arguments of \code{\link[=corr_wheel]{corr_wheel()}}.
 }
 \examples{
-if (requireNamespace("psych", quietly = TRUE)) {
-  cc <- compute_correlations(mtcars, method = "pearson")
-  str(cc)
-}
+cc <- compute_correlations(mtcars, method = "pearson")
+str(cc)
 }
 \seealso{
 \code{\link[=corr_wheel]{corr_wheel()}}

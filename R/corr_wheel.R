@@ -15,36 +15,23 @@
 #' correlations hidden.
 #'
 #' This is not only a display choice; it is carried through to the statistics.
-#' When the p-values are computed from raw data (or supplied via a
-#' [compute_correlations()] object), the multiple-comparison adjustment
-#' (`adjust`) is applied over **only the family of correlations shown** -- i.e.
-#' excluding self- and, when `hide_within_group = TRUE`, within-category
-#' correlations. Because those redundant comparisons no longer count towards the
-#' family, the correction is less severe and statistical power improves.
+#' The multiple-comparison adjustment (`adjust`) is applied over **only the
+#' family of correlations shown** -- i.e. excluding self- and, when
+#' `hide_within_group = TRUE`, within-category correlations. Because those
+#' redundant comparisons no longer count towards the family, the correction is
+#' less severe and statistical power improves.
 #'
-#' @param r One of three things, auto-detected:
-#'   * **raw data** -- a data frame or matrix with one row per observation
-#'     (e.g. one row per patient) and variables in columns. Correlations and
-#'     p-values are computed for you via [compute_correlations()] using
-#'     `method`, `adjust`, and `use`. This is the simplest entry point.
-#'   * a **correlation matrix** (square, with variable names as dimnames), or a
-#'     data frame of one; pass matching p-values via `p`.
-#'   * a **`"circlecor"`** object from [compute_correlations()]; its `p` matrix
-#'     is used and the `p` argument is ignored.
-#'
-#'   When `groups` is supplied, only the variables it names are used (in that
-#'   order), so extra columns such as IDs are simply ignored.
-#' @param p Optional matching matrix of p-values. If supplied, links with
-#'   `p > sig_level` are hidden. Ignored for raw data and `"circlecor"` inputs
-#'   (computed instead).
-#' @param method,use Passed to [compute_correlations()] when `r` is raw data:
-#'   the correlation method and the missing-value handling. Ignored otherwise.
+#' @param data A data frame or matrix with **one row per observation** (e.g. one
+#'   row per patient) and variables in columns. Correlations and p-values are
+#'   computed for you via [compute_correlations()] using `method`, `adjust`,
+#'   and `use`. When `groups` is supplied, only the variables it names are used
+#'   (in that order), so extra columns such as an ID are simply ignored.
+#' @param method,use Passed to [compute_correlations()]: the correlation method
+#'   and the missing-value handling.
 #' @param adjust Multiple-comparison adjustment method applied to the raw
 #'   p-values over the displayed family of correlations (see Details). Any
 #'   method accepted by [stats::p.adjust()] (e.g. `"holm"`, `"hochberg"`,
-#'   `"BH"`, `"bonferroni"`, `"none"`). Used only when the p-values are raw
-#'   (raw-data or `"circlecor"` input); a user-supplied `p` matrix is taken as
-#'   given.
+#'   `"BH"`, `"bonferroni"`, `"none"`).
 #' @param groups Category assignment for the variables. Either a named vector
 #'   (`variable = category`) or a named list (`category = c(variables)`). The
 #'   order of categories here sets their order around the wheel. If `NULL`, all
@@ -68,16 +55,13 @@
 #' @param order Optional character vector giving an explicit variable order
 #'   around the wheel. Overrides ordering by `groups`. Must contain every
 #'   variable.
-#' @param sig_level Significance threshold; links with `p > sig_level` are
-#'   hidden. Only used when a p-value matrix is available.
+#' @param sig_level Significance threshold; links with adjusted `p > sig_level`
+#'   are hidden.
 #' @param r_threshold Minimum absolute correlation to display.
 #' @param hide_within_group Logical; if `TRUE` (default) correlations between
 #'   two variables in the same category are hidden -- and excluded from the
 #'   multiple-comparison family (see Details). Self-correlations (the diagonal)
 #'   are always excluded.
-#' @param p_from When a p-value matrix is asymmetric (as from `psych`), which
-#'   triangle to mirror: `"lower"` (raw p-values, the default) or `"upper"`
-#'   (adjusted).
 #' @param r_limits Length-2 numeric giving the colour-scale limits
 #'   (`c(vmin, vmax)`). Correlations beyond these are clamped for colour.
 #' @param palette Colours for the diverging link scale at
@@ -118,26 +102,18 @@
 #'   Scores       = c("GCSI", "PAGI-SYM", "PAGI-QoL", "EQ-5D")
 #' )
 #'
-#' # Simplest: straight from a per-row data frame (correlations computed for you)
-#' data(gastro_symptoms)
-#' if (requireNamespace("psych", quietly = TRUE)) {
-#'   corr_wheel(gastro_symptoms, groups = grp, r_threshold = 0.3,
-#'              r_limits = c(-0.6, 0.6))
-#' }
-#'
-#' # Or from pre-computed matrices / a circlecor object
-#' data(gastro_cor)
-#' corr_wheel(gastro_cor, groups = grp, r_threshold = 0.3,
+#' # `gastro_symptoms` is a synthetic example dataset bundled with the package
+#' # (available directly after library(circlecorR) -- no need to call data()).
+#' corr_wheel(gastro_symptoms, groups = grp, r_threshold = 0.3,
 #'            r_limits = c(-0.6, 0.6))
 #'
 #' # A built-in colour scheme, with one category colour overridden
-#' corr_wheel(gastro_cor, groups = grp, r_threshold = 0.3, scheme = "colorblind",
-#'            colors = c(Scores = "black"))
+#' corr_wheel(gastro_symptoms, groups = grp, r_threshold = 0.3,
+#'            scheme = "colorblind", colors = c(Scores = "black"))
 #'
-#' @seealso [corr_wheel_schemes()], [corr_wheel_scheme()]
+#' @seealso [compute_correlations()], [corr_wheel_schemes()], [corr_wheel_scheme()]
 #' @export
-corr_wheel <- function(r,
-                       p = NULL,
+corr_wheel <- function(data,
                        groups = NULL,
                        scheme = NULL,
                        colors = NULL,
@@ -149,7 +125,6 @@ corr_wheel <- function(r,
                        method = c("pearson", "spearman", "kendall"),
                        adjust = "holm",
                        use = "pairwise.complete.obs",
-                       p_from = c("lower", "upper"),
                        r_limits = c(-0.5, 0.5),
                        palette = NULL,
                        start_degree = 90,
@@ -167,67 +142,24 @@ corr_wheel <- function(r,
                        colorbar = TRUE,
                        legend_title = "Category",
                        colorbar_title = "Correlation\ncoefficient") {
-  if (!requireNamespace("circlize", quietly = TRUE)) {
-    stop("corr_wheel() requires the 'circlize' package. ",
-         "Install it with install.packages('circlize').", call. = FALSE)
-  }
-  p_from <- match.arg(p_from)
   method <- match.arg(method)
 
   # Variables the user asked for, via `groups` (drives selection + ordering).
   target <- .groups_vars(groups)
 
-  # Are the p-values raw (so we may adjust them over the displayed family) or
-  # already final (a user-supplied p matrix we must take as given)?
-  p_is_raw <- FALSE
-
-  # ---- Resolve inputs: circlecor object, correlation matrix, or raw data ----
-  if (inherits(r, "circlecor")) {
-    if (is.null(p)) p <- r$p
-    r <- r$r
-    p_is_raw <- TRUE                 # compute_correlations() returns raw p
-  } else if (!.looks_like_cor(r)) {
-    # `r` is a raw data frame/matrix (one row per observation): compute here.
-    if (!is.null(p)) {
-      stop("When `r` is raw data, do not also pass `p`; it is computed.",
-           call. = FALSE)
-    }
-    data <- as.data.frame(r)
-    sel <- if (is.null(target)) colnames(data) else target
-    miss <- setdiff(sel, colnames(data))
-    if (length(miss)) {
-      stop("These variables are not columns of the data: ",
-           paste(miss, collapse = ", "), call. = FALSE)
-    }
-    cc <- compute_correlations(data[, sel, drop = FALSE], method = method,
-                               use = use)
-    r <- cc$r
-    p <- cc$p
-    p_from <- "lower"                # cc$p is already symmetric raw p
-    p_is_raw <- TRUE
+  # ---- Compute correlations straight from the raw data ----------------------
+  data <- as.data.frame(data)
+  sel <- if (is.null(target)) colnames(data) else target
+  miss <- setdiff(sel, colnames(data))
+  if (length(miss)) {
+    stop("These variables are not columns of `data`: ",
+         paste(miss, collapse = ", "), call. = FALSE)
   }
-
-  r <- .as_cor_matrix(r, "r")
-  if (!is.null(p)) p <- .symmetrise_p(p, from = p_from)
-
-  # Restrict to the requested variables (and check they exist).
-  if (!is.null(target)) {
-    miss <- setdiff(target, colnames(r))
-    if (length(miss)) {
-      stop("These grouped variables are not in the correlation matrix: ",
-           paste(miss, collapse = ", "), call. = FALSE)
-    }
-    r <- r[target, target, drop = FALSE]
-    if (!is.null(p)) p <- p[target, target, drop = FALSE]
-  }
+  cc <- compute_correlations(data[, sel, drop = FALSE], method = method,
+                             use = use)
+  r <- cc$r
+  p <- cc$p
   vars <- colnames(r)
-
-  if (!is.null(p)) {
-    if (!all(vars %in% colnames(p))) {
-      stop("`p` dimensions/names do not match `r`.", call. = FALSE)
-    }
-    p <- p[vars, vars, drop = FALSE]
-  }
 
   grp <- .resolve_groups(groups, vars)
   cats <- if (is.list(groups) && !is.null(names(groups))) names(groups) else unique(grp)
@@ -245,7 +177,7 @@ corr_wheel <- function(r,
   }
   n <- length(ord_vars)
   r <- r[ord_vars, ord_vars, drop = FALSE]
-  if (!is.null(p)) p <- p[ord_vars, ord_vars, drop = FALSE]
+  p <- p[ord_vars, ord_vars, drop = FALSE]
   grp <- grp[ord_vars]
 
   # ---- Colours --------------------------------------------------------------
@@ -286,11 +218,8 @@ corr_wheel <- function(r,
   n_tests <- sum(family)
 
   # ---- Multiple-comparison adjustment over the family ----------------------
-  # If the p-values are raw (computed here, or from a circlecor object), adjust
-  # them across the family only. If the user supplied a final p matrix, take it
-  # as given.
   p_adj <- p
-  if (!is.null(p) && p_is_raw && adjust != "none" && n_tests > 0) {
+  if (adjust != "none" && n_tests > 0) {
     p_adj <- matrix(NA_real_, n, n, dimnames = list(ord_vars, ord_vars))
     fam_idx <- which(family)
     p_adj[fam_idx] <- stats::p.adjust(p[fam_idx], method = adjust)
@@ -302,10 +231,7 @@ corr_wheel <- function(r,
     for (j in (i + 1):n) {
       if (!family[i, j]) next
       if (abs(r[i, j]) < r_threshold) keep[i, j] <- FALSE
-      if (!is.null(p_adj) &&
-          (is.na(p_adj[i, j]) || p_adj[i, j] > sig_level)) {
-        keep[i, j] <- FALSE
-      }
+      if (is.na(p_adj[i, j]) || p_adj[i, j] > sig_level) keep[i, j] <- FALSE
     }
   }
   drawn <- r
@@ -385,7 +311,6 @@ corr_wheel <- function(r,
   invisible(list(
     vars = ord_vars, groups = grp, colors = colmap,
     col_fun = col_fun, matrix = drawn, p_adjusted = p_adj,
-    n_links = sum(keep), n_tests = n_tests,
-    adjust = if (p_is_raw) adjust else "as-supplied"
+    n_links = sum(keep), n_tests = n_tests, adjust = adjust
   ))
 }

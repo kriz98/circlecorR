@@ -5,8 +5,7 @@
 \title{Draw a circular correlation wheel plot}
 \usage{
 corr_wheel(
-  r,
-  p = NULL,
+  data,
   groups = NULL,
   scheme = NULL,
   colors = NULL,
@@ -18,7 +17,6 @@ corr_wheel(
   method = c("pearson", "spearman", "kendall"),
   adjust = "holm",
   use = "pairwise.complete.obs",
-  p_from = c("lower", "upper"),
   r_limits = c(-0.5, 0.5),
   palette = NULL,
   start_degree = 90,
@@ -39,24 +37,11 @@ corr_wheel(
 )
 }
 \arguments{
-\item{r}{One of three things, auto-detected:
-\itemize{
-\item \strong{raw data} -- a data frame or matrix with one row per observation
-(e.g. one row per patient) and variables in columns. Correlations and
-p-values are computed for you via \code{\link[=compute_correlations]{compute_correlations()}} using
-\code{method}, \code{adjust}, and \code{use}. This is the simplest entry point.
-\item a \strong{correlation matrix} (square, with variable names as dimnames), or a
-data frame of one; pass matching p-values via \code{p}.
-\item a \strong{\code{"circlecor"}} object from \code{\link[=compute_correlations]{compute_correlations()}}; its \code{p} matrix
-is used and the \code{p} argument is ignored.
-}
-
-When \code{groups} is supplied, only the variables it names are used (in that
-order), so extra columns such as IDs are simply ignored.}
-
-\item{p}{Optional matching matrix of p-values. If supplied, links with
-\code{p > sig_level} are hidden. Ignored for raw data and \code{"circlecor"} inputs
-(computed instead).}
+\item{data}{A data frame or matrix with \strong{one row per observation} (e.g. one
+row per patient) and variables in columns. Correlations and p-values are
+computed for you via \code{\link[=compute_correlations]{compute_correlations()}} using \code{method}, \code{adjust},
+and \code{use}. When \code{groups} is supplied, only the variables it names are used
+(in that order), so extra columns such as an ID are simply ignored.}
 
 \item{groups}{Category assignment for the variables. Either a named vector
 (\code{variable = category}) or a named list (\code{category = c(variables)}). The
@@ -88,8 +73,8 @@ entries fall back to the variable name.}
 around the wheel. Overrides ordering by \code{groups}. Must contain every
 variable.}
 
-\item{sig_level}{Significance threshold; links with \code{p > sig_level} are
-hidden. Only used when a p-value matrix is available.}
+\item{sig_level}{Significance threshold; links with adjusted \code{p > sig_level}
+are hidden.}
 
 \item{r_threshold}{Minimum absolute correlation to display.}
 
@@ -98,19 +83,13 @@ two variables in the same category are hidden -- and excluded from the
 multiple-comparison family (see Details). Self-correlations (the diagonal)
 are always excluded.}
 
-\item{method, use}{Passed to \code{\link[=compute_correlations]{compute_correlations()}} when \code{r} is raw data:
-the correlation method and the missing-value handling. Ignored otherwise.}
+\item{method, use}{Passed to \code{\link[=compute_correlations]{compute_correlations()}}: the correlation method
+and the missing-value handling.}
 
 \item{adjust}{Multiple-comparison adjustment method applied to the raw
 p-values over the displayed family of correlations (see Details). Any
 method accepted by \code{\link[stats:p.adjust]{stats::p.adjust()}} (e.g. \code{"holm"}, \code{"hochberg"},
-\code{"BH"}, \code{"bonferroni"}, \code{"none"}). Used only when the p-values are raw
-(raw-data or \code{"circlecor"} input); a user-supplied \code{p} matrix is taken as
-given.}
-
-\item{p_from}{When a p-value matrix is asymmetric (as from \code{psych}), which
-triangle to mirror: \code{"lower"} (raw p-values, the default) or \code{"upper"}
-(adjusted).}
+\code{"BH"}, \code{"bonferroni"}, \code{"none"}).}
 
 \item{r_limits}{Length-2 numeric giving the colour-scale limits
 (\code{c(vmin, vmax)}). Correlations beyond these are clamped for colour.}
@@ -172,12 +151,11 @@ the correlations you actually want to inspect -- by default the
 correlations hidden.
 
 This is not only a display choice; it is carried through to the statistics.
-When the p-values are computed from raw data (or supplied via a
-\code{\link[=compute_correlations]{compute_correlations()}} object), the multiple-comparison adjustment
-(\code{adjust}) is applied over \strong{only the family of correlations shown} -- i.e.
-excluding self- and, when \code{hide_within_group = TRUE}, within-category
-correlations. Because those redundant comparisons no longer count towards the
-family, the correction is less severe and statistical power improves.
+The multiple-comparison adjustment (\code{adjust}) is applied over \strong{only the
+family of correlations shown} -- i.e. excluding self- and, when
+\code{hide_within_group = TRUE}, within-category correlations. Because those
+redundant comparisons no longer count towards the family, the correction is
+less severe and statistical power improves.
 }
 \examples{
 grp <- list(
@@ -188,23 +166,16 @@ grp <- list(
   Scores       = c("GCSI", "PAGI-SYM", "PAGI-QoL", "EQ-5D")
 )
 
-# Simplest: straight from a per-row data frame (correlations computed for you)
-data(gastro_symptoms)
-if (requireNamespace("psych", quietly = TRUE)) {
-  corr_wheel(gastro_symptoms, groups = grp, r_threshold = 0.3,
-             r_limits = c(-0.6, 0.6))
-}
-
-# Or from pre-computed matrices / a circlecor object
-data(gastro_cor)
-corr_wheel(gastro_cor, groups = grp, r_threshold = 0.3,
+# `gastro_symptoms` is a synthetic example dataset bundled with the package
+# (available directly after library(circlecorR) -- no need to call data()).
+corr_wheel(gastro_symptoms, groups = grp, r_threshold = 0.3,
            r_limits = c(-0.6, 0.6))
 
 # A built-in colour scheme, with one category colour overridden
-corr_wheel(gastro_cor, groups = grp, r_threshold = 0.3, scheme = "colorblind",
-           colors = c(Scores = "black"))
+corr_wheel(gastro_symptoms, groups = grp, r_threshold = 0.3,
+           scheme = "colorblind", colors = c(Scores = "black"))
 
 }
 \seealso{
-\code{\link[=corr_wheel_schemes]{corr_wheel_schemes()}}, \code{\link[=corr_wheel_scheme]{corr_wheel_scheme()}}
+\code{\link[=compute_correlations]{compute_correlations()}}, \code{\link[=corr_wheel_schemes]{corr_wheel_schemes()}}, \code{\link[=corr_wheel_scheme]{corr_wheel_scheme()}}
 }

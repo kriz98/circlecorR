@@ -6,13 +6,13 @@ Authors@R: c(
            role = c("aut", "cre")),
     person("Armen A.", "Gharibans", role = "aut"))
 Description: Draws circular "correlation wheel" plots (as popularised by the
-    'MNE' Python library) natively in R. Variables are arranged around a
-    circle, grouped and colour-tiled by category, and connected by curved
-    links whose colour maps to the correlation coefficient. Non-significant,
-    weak, and within-category correlations can be masked. Correlations can be
-    supplied as pre-computed r/p matrices or computed from raw data via a
-    thin wrapper around corr.test() from the 'psych' package. Categories,
-    colours, and labels are all user-configurable.
+    'MNE' Python library) natively in R, straight from a data frame of one
+    row per observation. Variables are arranged around a circle, grouped and
+    colour-tiled by category, and connected by curved links whose colour maps
+    to the correlation coefficient, computed via a thin wrapper around
+    corr.test() from the 'psych' package. Non-significant, weak, and
+    within-category correlations can be masked. Categories, colours, and
+    labels are all user-configurable.
 License: MIT + file LICENSE
 Language: en-GB
 Encoding: UTF-8
@@ -22,9 +22,9 @@ Depends:
 Imports:
     circlize (>= 0.4.0),
     graphics,
+    psych,
     stats
 Suggests:
-    psych,
     testthat (>= 3.0.0),
     knitr,
     rmarkdown

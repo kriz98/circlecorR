@@ -26,20 +26,13 @@
 #'
 #' @seealso [corr_wheel()]
 #' @examples
-#' if (requireNamespace("psych", quietly = TRUE)) {
-#'   cc <- compute_correlations(mtcars, method = "pearson")
-#'   str(cc)
-#' }
+#' cc <- compute_correlations(mtcars, method = "pearson")
+#' str(cc)
 #' @export
 compute_correlations <- function(data,
                                  vars = NULL,
                                  method = c("pearson", "spearman", "kendall"),
                                  use = "pairwise.complete.obs") {
-  if (!requireNamespace("psych", quietly = TRUE)) {
-    stop("`compute_correlations()` requires the 'psych' package. ",
-         "Install it with install.packages('psych'), or pass pre-computed ",
-         "r/p matrices to corr_wheel() directly.", call. = FALSE)
-  }
   method <- match.arg(method)
   if (!is.null(vars)) {
     missing <- setdiff(vars, colnames(data))

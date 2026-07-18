@@ -66,9 +66,4 @@ clean <- c(
 )
 names(gastro_symptoms) <- unname(clean[names(gastro_symptoms)])
 
-# Correlation object (r + raw p) via the package's own helper
-suppressMessages(devtools::load_all("."))
-gastro_cor <- compute_correlations(gastro_symptoms, method = "pearson")
-
 usethis::use_data(gastro_symptoms, overwrite = TRUE)
-usethis::use_data(gastro_cor, overwrite = TRUE)

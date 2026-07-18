@@ -30,20 +30,17 @@ remotes::install_github("kriz98/circlecorR", build_vignettes = TRUE)
 
 *(CRAN release pending.)*
 
-It needs `circlize`; `psych` is only required if you let the package compute
-correlations for you (the raw-data path below).
-
-```r
-install.packages(c("circlize", "psych"))
-```
+Dependencies (`circlize` and `psych`) install automatically with the command
+above.
 
 ## Quick start — straight from your data
 
-Most datasets are **one row per subject, one column per variable**. You don't
-need to build correlation matrices yourself: hand that data frame to
-`corr_wheel()` and it computes the correlations and p-values for you. The only
-other thing you supply is `groups`, which both selects the variables and orders
-them around the wheel (extra columns like IDs are ignored).
+`circlecorR` is designed to work straight from a data frame -- **one row per
+subject, one column per variable** -- with no separate step to build
+correlation matrices yourself. Hand that data frame to `corr_wheel()` and it
+computes the correlations and p-values for you. The only other thing you
+supply is `groups`, which both selects the variables and orders them around
+the wheel (extra columns like IDs are ignored).
 
 ```r
 library(circlecorR)
@@ -67,17 +64,6 @@ corr_wheel(
   r_threshold = 0.3,
   r_limits    = c(-0.6, 0.6)
 )
-```
-
-### From pre-computed r / p matrices (e.g. existing CSVs)
-
-`corr_wheel()` auto-detects a correlation matrix, so the old two-file workflow
-still works:
-
-```r
-r <- as.matrix(read.csv("Rvalues.csv", row.names = 1))
-p <- as.matrix(read.csv("Pvalues.csv", row.names = 1))
-corr_wheel(r, p, groups = groups, r_threshold = 0.3)
 ```
 
 ### Save to file
@@ -120,9 +106,12 @@ for reproducibility or building a caption.
 
 ## Example data
 
-`gastro_symptoms` (raw) and `gastro_cor` (an r/p `circlecor` object) are bundled
-**synthetic** datasets — fully simulated, not patient data — mimicking a gastric
--symptom study. See `?gastro_cor`.
+`gastro_symptoms` is a bundled **synthetic** dataset — fully simulated, not
+patient data — mimicking a gastric-symptom study, one row per subject. It's
+loaded automatically with the package (`LazyData: true`), so it's available
+directly as soon as you `library(circlecorR)` — no `data()` call needed. See
+`?gastro_symptoms` for details, or use it as a template for your own data's
+shape.
 
 ## How masking & statistics work
 
@@ -133,12 +122,11 @@ A link between variables *i* and *j* is drawn only if all hold:
 2. `p_adjusted <= sig_level`; and
 3. `|r| >= r_threshold`.
 
-The correlations left after step 1 form the **family** of comparisons. When the
-p-values are raw (computed from your data, or from a `circlecor` object), the
-`adjust` correction is applied over **only that family** — so redundant self- and
-within-category correlations don't inflate the count, and power improves. A
-pre-computed `p` matrix is used as given. `corr_wheel()` returns `n_tests` (the
-family size) and the family-adjusted p-matrix for reporting.
+The correlations left after step 1 form the **family** of comparisons. The
+`adjust` correction is applied over **only that family** — so redundant self-
+and within-category correlations don't inflate the count, and power improves.
+`corr_wheel()` returns `n_tests` (the family size) and the family-adjusted
+p-matrix for reporting.
 
 ## Reference
 
