@@ -53,7 +53,7 @@
 #'   diverging link palette together. One of:
 #'   * `NULL` (default) -- use the package default scheme;
 #'   * a built-in scheme name, see [corr_wheel_schemes()] (e.g. `"colorblind"`,
-#'     `"mono_blue"`, `"vivid"`);
+#'     `"ocean"`, `"vivid"`);
 #'   * a custom `list(colors = , palette = )`, as returned by
 #'     [corr_wheel_scheme()] (optionally tweaked).
 #'

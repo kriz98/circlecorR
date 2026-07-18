@@ -167,7 +167,7 @@ test_that("p symmetrisation mirrors the requested triangle", {
 
 test_that("corr_wheel_schemes lists the built-in schemes", {
   s <- corr_wheel_schemes()
-  expect_true(all(c("default", "colorblind", "mono_blue", "vivid") %in% s))
+  expect_true(all(c("default", "colorblind", "ocean", "vivid") %in% s))
 })
 
 test_that("corr_wheel_scheme returns a colors/palette list", {
@@ -175,6 +175,13 @@ test_that("corr_wheel_scheme returns a colors/palette list", {
   expect_true(all(c("colors", "palette") %in% names(s)))
   expect_length(s$palette, 3)
   expect_error(corr_wheel_scheme("not_a_scheme"))
+})
+
+test_that("built-in scheme category colours are all distinct", {
+  for (nm in corr_wheel_schemes()) {
+    cols <- corr_wheel_scheme(nm)$colors
+    expect_equal(length(unique(cols)), length(cols), info = nm)
+  }
 })
 
 test_that("scheme sets category colours and link palette", {

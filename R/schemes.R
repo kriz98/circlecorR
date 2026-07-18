@@ -12,10 +12,13 @@
                "#D55E00", "#CC79A7", "#999999"),
     palette = c("#E66101", "#F7F7F7", "#5E3C99")
   ),
-  mono_blue = list(
-    # Shades of blue for categories, blue<->warm diverging -- echoes the
-    # package's hex-sticker branding.
-    colors  = c("#0B2F6B", "#1D4ED8", "#3B82F6", "#7DB8F7", "#BFE3FF"),
+  ocean = list(
+    # Cool-toned but hue-varied (teal, blue, indigo, violet, slate) so
+    # categories stay easy to tell apart at a glance -- shades of a single
+    # colour read as one blur once there are more than two or three
+    # categories. Blue<->warm diverging echoes the package's hex-sticker
+    # branding.
+    colors  = c("#0E7490", "#2563EB", "#4338CA", "#7C3AED", "#475569"),
     palette = c("#1D4ED8", "#F5F7FF", "#F0834D")
   ),
   vivid = list(
