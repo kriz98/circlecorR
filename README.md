@@ -48,6 +48,8 @@ them around the wheel (extra columns like IDs are ignored).
 ```r
 library(circlecorR)
 
+# `gastro_symptoms` is a synthetic example dataset bundled with the package --
+# swap it for your own data frame (one row per subject) to use your own data.
 groups <- list(
   Demographics = c("Age", "BMI"),
   Metrics      = c("Amplitude", "Fed-Fasted AR", "Frequency", "GA-RI"),
@@ -57,7 +59,7 @@ groups <- list(
 )
 
 corr_wheel(
-  my_data,                 # one row per subject
+  gastro_symptoms,          # one row per subject -- use your own data here
   groups      = groups,
   method      = "pearson",
   adjust      = "hochberg",
@@ -82,7 +84,7 @@ corr_wheel(r, p, groups = groups, r_threshold = 0.3)
 
 ```r
 png("correlation_wheel.png", width = 2400, height = 2000, res = 300)
-corr_wheel(my_data, groups = groups, r_threshold = 0.3, r_limits = c(-0.6, 0.6))
+corr_wheel(gastro_symptoms, groups = groups, r_threshold = 0.3, r_limits = c(-0.6, 0.6))
 dev.off()
 ```
 
