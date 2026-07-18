@@ -2,11 +2,17 @@
 # (the canonical asset, committed at man/figures/logo.svg), then rasterise a
 # PNG copy for tools that need a raster (pkgdown favicons, non-SVG contexts).
 #
-# Design: light, minimal, "Apple-esque" -- a pale solid-colour hex with
-# softly rounded (squircle-like) corners, a bold segmented halo ring (echoing
-# the category-tile ring in the actual plots), and bold monochrome blue
-# chords -- a soft diffused shadow instead of a hard border, and a slim
-# dark-slate wordmark.
+# Design: matches Alimetry's brand ethos (from alimetry.com) -- a dark
+# teal-to-navy diagonal gradient (not a light/pale surface), a vivid electric-
+# cyan accent for the ring and chords (their CTA-button/headline colour), a
+# white wordmark, and softly rounded (squircle-like) corners echoing their
+# rounded-pill buttons/badges. The halo ring stays segmented like the
+# category-tile ring in the actual plots, and the chords stay bold, per
+# earlier feedback for stronger presence.
+#
+# Colours are approximated by eye from screenshots of alimetry.com, not taken
+# from an official brand-colour spec -- swap the hex codes below if exact
+# values are supplied later.
 
 # --- Geometry (pointy-top hexagon, the standard hex-sticker proportions) --
 H  <- 1200
@@ -69,9 +75,9 @@ node_y <- ring_cy + R_ring * sin(deg2rad(node_deg))
 pairs <- rbind(
   c(1, 4), c(2, 7), c(3, 6), c(8, 4), c(2, 5), c(1, 6)
 )
-chord_col <- "#1D4ED8"
+chord_col <- "#22C3F0"
 chord_w   <- c(10, 8, 9, 7, 8, 7)
-chord_op  <- c(.9, .65, .8, .55, .7, .6)
+chord_op  <- c(.95, .7, .85, .6, .75, .65)
 
 pull <- 0.6   # 0 = straight line, 1 = bow fully through the ring centre
 chords <- vapply(seq_len(nrow(pairs)), function(k) {
@@ -92,20 +98,31 @@ chords <- vapply(seq_len(nrow(pairs)), function(k) {
 # --- Assemble SVG -------------------------------------------------------
 svg <- sprintf('<svg xmlns="http://www.w3.org/2000/svg" width="%.2f" height="%d" viewBox="0 0 %.2f %d">
   <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.75" y2="1">
+      <stop offset="0%%"   stop-color="#1878A0"/>
+      <stop offset="55%%"  stop-color="#0D3B5C"/>
+      <stop offset="100%%" stop-color="#081420"/>
+    </linearGradient>
     <clipPath id="hexClip"><path d="%s"/></clipPath>
     <filter id="softShadow" x="-40%%" y="-40%%" width="180%%" height="180%%">
-      <feDropShadow dx="0" dy="10" stdDeviation="22" flood-color="#1E3A8A" flood-opacity="0.18"/>
+      <feDropShadow dx="0" dy="10" stdDeviation="22" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+    <filter id="glow" x="-60%%" y="-60%%" width="220%%" height="220%%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
     </filter>
   </defs>
 
-  <path d="%s" fill="#E4EEFC" filter="url(#softShadow)"/>
-  <path d="%s" fill="none" stroke="#B9D2F5" stroke-width="3" opacity="0.8"/>
+  <path d="%s" fill="url(#bg)" filter="url(#softShadow)"/>
 
   <g clip-path="url(#hexClip)">
     <!-- halo ring, segmented like the category-tile ring in the real plots -->
-    <circle cx="%.1f" cy="%.1f" r="%.1f" fill="none" stroke="#1D4ED8"
+    <circle cx="%.1f" cy="%.1f" r="%.1f" fill="none" stroke="#22C3F0"
             stroke-width="20" stroke-dasharray="%.1f %.1f"
-            stroke-linecap="round" opacity="0.95"/>
+            stroke-linecap="round" opacity="0.95" filter="url(#glow)"/>
 
     <!-- correlation chords -->
     %s
@@ -114,11 +131,10 @@ svg <- sprintf('<svg xmlns="http://www.w3.org/2000/svg" width="%.2f" height="%d"
   <!-- wordmark -->
   <text x="%.1f" y="860" text-anchor="middle"
         font-family="Avenir Next, Century Gothic, Futura, Helvetica Neue, Arial, sans-serif"
-        font-size="98" font-weight="500" fill="#1E293B"
+        font-size="98" font-weight="600" fill="#FFFFFF"
         letter-spacing="1">circlecorR</text>
 </svg>',
   W, H, W, H,
-  hex,
   hex,
   hex,
   ring_cx, ring_cy, R_ring, dash_on, dash_gap,
