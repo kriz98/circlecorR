@@ -25,7 +25,7 @@ Useful links:
 Authors:
 \itemize{
   \item Chris Varghese \email{chris.varghese@alimetry.com}
-  \item Armen A Gharibans
+  \item Armen A. Gharibans
 }
 
 }
