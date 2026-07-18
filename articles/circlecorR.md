@@ -159,7 +159,7 @@ together, as one named preset. Built-in options are listed by
 ``` r
 
 corr_wheel_schemes()
-#> [1] "default"    "colorblind" "ocean"      "vivid"
+#> [1] "default"    "colorblind" "ocean"      "vivid"      "alimetry"
 ```
 
 - `"default"` – the seaborn-like categorical palette and a
@@ -170,6 +170,8 @@ corr_wheel_schemes()
   for categories, with a blue-to-warm diverging scale.
 - `"vivid"` – a brighter, higher-contrast categorical palette, still
   paired with the blue-white-red diverging scale.
+- `"alimetry"` – blues alternating with warm golds, with a matching
+  blue-to-yellow diverging scale.
 
 ``` r
 
@@ -178,6 +180,14 @@ corr_wheel(gastro_symptoms, groups = groups, r_threshold = 0.3,
 ```
 
 ![](circlecorR_files/figure-html/scheme-colorblind-1.png)
+
+``` r
+
+corr_wheel(gastro_symptoms, groups = groups, r_threshold = 0.3,
+          r_limits = c(-0.6, 0.6), scheme = "alimetry")
+```
+
+![](circlecorR_files/figure-html/scheme-alimetry-1.png)
 
 [`corr_wheel_scheme()`](https://kriz98.github.io/circlecorR/reference/corr_wheel_scheme.md)
 returns a scheme’s definition so you can start from a preset and tweak
