@@ -23,7 +23,25 @@ by their coefficient (Gharibans et al. 2019). `circlecorR` reproduces
 that figure natively in R and makes the grouping, colours, and
 statistics configurable.
 
-## The simplest path: straight from your data
+## Installation
+
+``` r
+
+# install.packages("remotes")
+remotes::install_github("kriz98/circlecorR", build_vignettes = TRUE)
+```
+
+*(CRAN release pending.)*
+
+`circlecorR` needs `circlize`; `psych` is only required if you let the
+package compute correlations for you (the raw-data path below).
+
+``` r
+
+install.packages(c("circlize", "psych"))
+```
+
+## Quick start: straight from your data
 
 Most datasets have **one row per subject** and **one column per
 variable**. You do not need to build correlation matrices yourself –
@@ -282,6 +300,32 @@ corr_wheel(gastro_symptoms, groups = groups, r_threshold = 0.3,
            r_limits = c(-0.6, 0.6))
 dev.off()
 ```
+
+## Argument reference
+
+Everything covered above, at a glance:
+
+| What | Argument | Example |
+|----|----|----|
+| Category assignment & order | `groups` | named list *or* `variable = category` vector |
+| Colour scheme (category colours + link palette, together) | `scheme` | `"colorblind"`, `"ocean"`, `"vivid"`, `"alimetry"`, or `list(colors=, palette=)` |
+| Category colours | `colors` | `c(Symptoms = "#55A868", Scores = "#C44E52")` (overrides `scheme` per category) |
+| Pretty variable labels | `labels` | `c("GA-RI" = "Rhythm index")` |
+| Significance cutoff | `sig_level` | `0.05` |
+| Multiple-comparison adjustment | `adjust` | `"holm"`, `"hochberg"`, `"BH"`, `"none"` |
+| Minimum \|r\| shown | `r_threshold` | `0.3` |
+| Hide within-category links | `hide_within_group` | `TRUE` / `FALSE` |
+| Colour-scale range | `r_limits` | `c(-0.5, 0.5)` |
+| Link colour ramp | `palette` | `c("#2166AC", "white", "#B2182B")` (overrides `scheme`’s) |
+| Block size (thickness) | `tile_height` | `0.06` (thin) … `0.12` (thick) |
+| Line size (width) | `link_lwd` | `1.6`, `3` |
+| Rotation / spacing | `start_degree`, `group_gap`, `node_gap` |  |
+| Legend / colour bar | `legend`, `colorbar` |  |
+
+[`corr_wheel()`](https://kriz98.github.io/circlecorR/reference/corr_wheel.md)
+returns (invisibly) the ordered variables, resolved group and colour
+maps, the colour function, and the masked matrix actually plotted –
+handy for reproducibility or building a caption.
 
 ## References
 
