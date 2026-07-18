@@ -2,11 +2,10 @@ Package: circlecorR
 Title: Circular Correlation Wheel Plots
 Version: 0.1.0
 Authors@R: c(
-    person("Chris", "Varghese", email = "chris.varghese@alimetry.com",
+    person("Chris", "Varghese", email = "chris.varghese@auckland.ac.nz",
            role = c("aut", "cre")),
     person("Armen A.", "Gharibans", role = "aut"))
-Description: Draws circular "correlation wheel" plots (as popularised by the
-    'MNE' Python library) natively in R, straight from a data frame of one
+Description: Draws circular "correlation wheel" plots in R, straight from a data frame of one
     row per observation. Variables are arranged around a circle, grouped and
     colour-tiled by category, and connected by curved links whose colour maps
     to the correlation coefficient, computed via a thin wrapper around

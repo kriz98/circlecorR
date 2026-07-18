@@ -20,11 +20,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Chris Varghese \email{chris.varghese@alimetry.com}
+\strong{Maintainer}: Chris Varghese \email{chris.varghese@auckland.ac.nz}
 
 Authors:
 \itemize{
-  \item Chris Varghese \email{chris.varghese@alimetry.com}
+  \item Chris Varghese \email{chris.varghese@auckland.ac.nz}
   \item Armen A. Gharibans
 }
 
