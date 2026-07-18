@@ -26,14 +26,17 @@
     palette = c("#2166AC", "#FFFFFF", "#B2182B")
   ),
   alimetry = list(
-    # Blues alternating with warm golds, echoing Alimetry's brand palette
-    # (a dark teal-to-navy backdrop with an electric-cyan accent) and the
-    # blue-to-yellow heatmaps in their spectrogram figures. The two yellows
-    # are spread well apart in lightness (rich gold vs. pale lemon) so they
-    # stay distinguishable, rather than reading as near-duplicates. Diverging
-    # scale mirrors that same blue<->yellow visual language.
-    colors  = c("#0D3B5C", "#F5C518", "#1878A0", "#FDE047", "#22C3F0"),
-    palette = c("#1878A0", "#F5F7FF", "#F5C518")
+    # Alimetry's two dominant brand colours -- black and blue (through to
+    # cyan) -- carry most of the categories, with a single gold used
+    # sparingly as a highlight rather than paired up with a second yellow.
+    # Blues sampled directly from alimetry.com (sky-blue headings/CTA
+    # buttons); black is the site's page background. No greens or teal: the
+    # only place green appears on the site is as a transient hue inside the
+    # spectrogram heatmap's own colour gradient, which is a data-viz
+    # colormap rather than a brand colour, so it's deliberately not echoed
+    # here. Diverging scale mirrors that same blue<->gold brand language.
+    colors  = c("#000000", "#0D3B5C", "#2D78A2", "#51B2DB", "#F5C518"),
+    palette = c("#2D78A2", "#F5F7FF", "#F5C518")
   )
 )
 
