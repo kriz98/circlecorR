@@ -1,4 +1,4 @@
-# circlecorR
+# circlecorR <img src="man/figures/logo.svg" align="right" height="139" alt="circlecorR logo" />
 
 <!-- badges: start -->
 <!-- badges: end -->
