@@ -150,18 +150,68 @@ corr_wheel(r, p, groups = groups, r_threshold = 0.3)
 
 ## Customising the look
 
+### Colour schemes
+
+`scheme` sets the category colours and the diverging link palette
+together, as one named preset. Built-in options are listed by
+[`corr_wheel_schemes()`](https://kriz98.github.io/circlecorR/reference/corr_wheel_schemes.md):
+
+``` r
+
+corr_wheel_schemes()
+#> [1] "default"    "colorblind" "mono_blue"  "vivid"
+```
+
+``` r
+
+corr_wheel(gastro_symptoms, groups = groups, r_threshold = 0.3,
+          r_limits = c(-0.6, 0.6), scheme = "colorblind")
+```
+
+![](circlecorR_files/figure-html/scheme-colorblind-1.png)
+
+[`corr_wheel_scheme()`](https://kriz98.github.io/circlecorR/reference/corr_wheel_scheme.md)
+returns a scheme’s definition so you can start from a preset and tweak
+it – here, lightening the midpoint of the diverging scale:
+
+``` r
+
+s <- corr_wheel_scheme("mono_blue")
+s$palette[2] <- "grey96"
+corr_wheel(gastro_symptoms, groups = groups, r_threshold = 0.3,
+          r_limits = c(-0.6, 0.6), scheme = s)
+```
+
+![](circlecorR_files/figure-html/scheme-tweak-1.png)
+
+Or build one entirely from scratch by passing
+`list(colors = , palette = )` directly – `colors` is an unnamed vector
+cycled across however many categories you have, and `palette` is the
+length-3 diverging scale (negative, midpoint, positive):
+
+``` r
+
+corr_wheel(gastro_symptoms, groups = groups, r_threshold = 0.3,
+          r_limits = c(-0.6, 0.6),
+          scheme = list(colors = c("#7B2CBF", "#2A9D8F", "#E76F51", "#264653"),
+                       palette = c("#2A9D8F", "white", "#E76F51")))
+```
+
+![](circlecorR_files/figure-html/scheme-custom-1.png)
+
 ### Colours and labels
 
-`colors` maps categories to colours; `labels` gives pretty display
-names. Both are named vectors – specify only the ones you want to
-change.
+`colors` maps categories to colours, layered on top of `scheme` (or the
+default palette if `scheme` is `NULL`) – only the categories you name
+are overridden. `labels` gives pretty display names. Both are named
+vectors – specify only the ones you want to change.
 
 ``` r
 
 corr_wheel(
   gastro_symptoms, groups = groups, r_threshold = 0.3, r_limits = c(-0.6, 0.6),
-  colors = c(Demographics = "#4C72B0", Metrics = "#DD8452",
-             Symptoms = "#55A868", Scores = "#C44E52"),
+  scheme = "colorblind",
+  colors = c(Scores = "black"),          # override just one category
   labels = c(`GA-RI` = "Rhythm index")
 )
 ```
@@ -187,8 +237,8 @@ corr_wheel(
 
 ### The diverging colour scale
 
-`palette` sets the three colours at `c(-limit, 0, +limit)` and
-`r_limits` the scale range.
+`palette` sets the three colours at `c(-limit, 0, +limit)` (overriding
+`scheme`’s) and `r_limits` the scale range.
 
 ``` r
 

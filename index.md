@@ -106,18 +106,27 @@ Everything the reference figure controls is a plain argument:
 | What | Argument | Example |
 |----|----|----|
 | Category assignment & order | `groups` | named list *or* `variable = category` vector |
-| Category colours | `colors` | `c(Symptoms = "#55A868", Scores = "#C44E52")` |
+| Colour scheme (category colours + link palette, together) | `scheme` | `"colorblind"`, `"mono_blue"`, `"vivid"`, or `list(colors=, palette=)` |
+| Category colours | `colors` | `c(Symptoms = "#55A868", Scores = "#C44E52")` (overrides `scheme` per category) |
 | Pretty variable labels | `labels` | `c(`GA-RI`= "Rhythm index")` |
 | Significance cutoff | `sig_level` | `0.05` |
 | Multiple-comparison adjustment | `adjust` | `"holm"`, `"hochberg"`, `"BH"`, `"none"` |
 | Minimum \|r\| shown | `r_threshold` | `0.3` |
 | Hide within-category links | `hide_within_group` | `TRUE` / `FALSE` |
 | Colour-scale range | `r_limits` | `c(-0.5, 0.5)` |
-| Link colour ramp | `palette` | `c("#2166AC", "white", "#B2182B")` |
+| Link colour ramp | `palette` | `c("#2166AC", "white", "#B2182B")` (overrides `scheme`’s) |
 | Block size (thickness) | `tile_height` | `0.06` (thin) … `0.12` (thick) |
 | Line size (width) | `link_lwd` | `1.6`, `3` |
 | Rotation / spacing | `start_degree`, `group_gap`, `node_gap` |  |
 | Legend / colour bar | `legend`, `colorbar` |  |
+
+Built-in schemes are listed with
+[`corr_wheel_schemes()`](https://kriz98.github.io/circlecorR/reference/corr_wheel_schemes.md)
+and inspected/tweaked with
+[`corr_wheel_scheme()`](https://kriz98.github.io/circlecorR/reference/corr_wheel_scheme.md);
+see
+[`vignette("circlecorR")`](https://kriz98.github.io/circlecorR/articles/circlecorR.md)
+for examples.
 
 [`corr_wheel()`](https://kriz98.github.io/circlecorR/reference/corr_wheel.md)
 returns (invisibly) the ordered variables, resolved group and colour

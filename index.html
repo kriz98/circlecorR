@@ -138,9 +138,17 @@
 <td>named list <em>or</em> <code>variable = category</code> vector</td>
 </tr>
 <tr>
+<td>Colour scheme (category colours + link palette, together)</td>
+<td><code>scheme</code></td>
+<td>
+<code>"colorblind"</code>, <code>"mono_blue"</code>, <code>"vivid"</code>, or <code>list(colors=, palette=)</code>
+</td>
+</tr>
+<tr>
 <td>Category colours</td>
 <td><code>colors</code></td>
-<td><code>c(Symptoms = "#55A868", Scores = "#C44E52")</code></td>
+<td>
+<code>c(Symptoms = "#55A868", Scores = "#C44E52")</code> (overrides <code>scheme</code> per category)</td>
 </tr>
 <tr>
 <td>Pretty variable labels</td>
@@ -181,7 +189,8 @@
 <tr>
 <td>Link colour ramp</td>
 <td><code>palette</code></td>
-<td><code>c("#2166AC", "white", "#B2182B")</code></td>
+<td>
+<code>c("#2166AC", "white", "#B2182B")</code> (overrides <code>scheme</code>’s)</td>
 </tr>
 <tr>
 <td>Block size (thickness)</td>
@@ -212,6 +221,7 @@
 </tr>
 </tbody>
 </table>
+<p>Built-in schemes are listed with <code><a href="reference/corr_wheel_schemes.html">corr_wheel_schemes()</a></code> and inspected/tweaked with <code><a href="reference/corr_wheel_scheme.html">corr_wheel_scheme()</a></code>; see <code><a href="articles/circlecorR.html">vignette("circlecorR")</a></code> for examples.</p>
 <p><code><a href="reference/corr_wheel.html">corr_wheel()</a></code> returns (invisibly) the ordered variables, resolved group and colour maps, the colour function, and the masked matrix actually plotted — handy for reproducibility or building a caption.</p>
 </div>
 <div class="section level2">

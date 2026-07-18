@@ -200,16 +200,52 @@ matrix;</li>
 <h2 id="customising-the-look">Customising the look<a class="anchor" aria-label="anchor" href="#customising-the-look"></a>
 </h2>
 <div class="section level3">
+<h3 id="colour-schemes">Colour schemes<a class="anchor" aria-label="anchor" href="#colour-schemes"></a>
+</h3>
+<p><code>scheme</code> sets the category colours and the diverging link
+palette together, as one named preset. Built-in options are listed by
+<code><a href="../reference/corr_wheel_schemes.html">corr_wheel_schemes()</a></code>:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/corr_wheel_schemes.html">corr_wheel_schemes</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "default"    "colorblind" "mono_blue"  "vivid"</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span><span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>          r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span>, scheme <span class="op">=</span> <span class="st">"colorblind"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="circlecorR_files/figure-html/scheme-colorblind-1.png" class="r-plt" alt="" width="880" style="display: block; margin: auto;"></p>
+<p><code><a href="../reference/corr_wheel_scheme.html">corr_wheel_scheme()</a></code> returns a scheme’s definition so you
+can start from a preset and tweak it – here, lightening the midpoint of
+the diverging scale:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/corr_wheel_scheme.html">corr_wheel_scheme</a></span><span class="op">(</span><span class="st">"mono_blue"</span><span class="op">)</span></span>
+<span><span class="va">s</span><span class="op">$</span><span class="va">palette</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"grey96"</span></span>
+<span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span><span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>          r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span>, scheme <span class="op">=</span> <span class="va">s</span><span class="op">)</span></span></code></pre></div>
+<p><img src="circlecorR_files/figure-html/scheme-tweak-1.png" class="r-plt" alt="" width="880" style="display: block; margin: auto;"></p>
+<p>Or build one entirely from scratch by passing
+<code>list(colors = , palette = )</code> directly – <code>colors</code>
+is an unnamed vector cycled across however many categories you have, and
+<code>palette</code> is the length-3 diverging scale (negative,
+midpoint, positive):</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span><span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>          r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span>,</span>
+<span>          scheme <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#7B2CBF"</span>, <span class="st">"#2A9D8F"</span>, <span class="st">"#E76F51"</span>, <span class="st">"#264653"</span><span class="op">)</span>,</span>
+<span>                       palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#2A9D8F"</span>, <span class="st">"white"</span>, <span class="st">"#E76F51"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="circlecorR_files/figure-html/scheme-custom-1.png" class="r-plt" alt="" width="880" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level3">
 <h3 id="colours-and-labels">Colours and labels<a class="anchor" aria-label="anchor" href="#colours-and-labels"></a>
 </h3>
-<p><code>colors</code> maps categories to colours; <code>labels</code>
-gives pretty display names. Both are named vectors – specify only the
-ones you want to change.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p><code>colors</code> maps categories to colours, layered on top of
+<code>scheme</code> (or the default palette if <code>scheme</code> is
+<code>NULL</code>) – only the categories you name are overridden.
+<code>labels</code> gives pretty display names. Both are named vectors –
+specify only the ones you want to change.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span></span>
 <span>  <span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>, r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span>,</span>
-<span>  colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Demographics <span class="op">=</span> <span class="st">"#4C72B0"</span>, Metrics <span class="op">=</span> <span class="st">"#DD8452"</span>,</span>
-<span>             Symptoms <span class="op">=</span> <span class="st">"#55A868"</span>, Scores <span class="op">=</span> <span class="st">"#C44E52"</span><span class="op">)</span>,</span>
+<span>  scheme <span class="op">=</span> <span class="st">"colorblind"</span>,</span>
+<span>  colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Scores <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,          <span class="co"># override just one category</span></span>
 <span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`GA-RI` <span class="op">=</span> <span class="st">"Rhythm index"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="circlecorR_files/figure-html/colours-1.png" class="r-plt" alt="" width="880" style="display: block; margin: auto;"></p>
@@ -225,7 +261,7 @@ ones you want to change.</p>
 <code>link_lwd</code> – <strong>line</strong> width of the links
 (larger = thicker).</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span></span>
 <span>  <span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>, r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span>,</span>
 <span>  tile_height <span class="op">=</span> <span class="fl">0.12</span>,   <span class="co"># thicker blocks</span></span>
@@ -237,9 +273,9 @@ ones you want to change.</p>
 <h3 id="the-diverging-colour-scale">The diverging colour scale<a class="anchor" aria-label="anchor" href="#the-diverging-colour-scale"></a>
 </h3>
 <p><code>palette</code> sets the three colours at
-<code>c(-limit, 0, +limit)</code> and <code>r_limits</code> the scale
-range.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code>c(-limit, 0, +limit)</code> (overriding <code>scheme</code>’s) and
+<code>r_limits</code> the scale range.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span></span>
 <span>  <span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>  palette  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#2166AC"</span>, <span class="st">"white"</span>, <span class="st">"#B2182B"</span><span class="op">)</span>,   <span class="co"># blue - white - red</span></span>
@@ -253,7 +289,7 @@ range.</p>
 </h2>
 <p><code><a href="../reference/corr_wheel.html">corr_wheel()</a></code> draws on the active graphics device, so
 save it the usual way:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">png</a></span><span class="op">(</span><span class="st">"correlation_wheel.png"</span>, width <span class="op">=</span> <span class="fl">2500</span>, height <span class="op">=</span> <span class="fl">2000</span>, res <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span><span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>           r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span><span class="op">)</span></span>

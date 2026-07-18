@@ -13,6 +13,7 @@ corr_wheel(
   r,
   p = NULL,
   groups = NULL,
+  scheme = NULL,
   colors = NULL,
   labels = NULL,
   order = NULL,
@@ -24,7 +25,7 @@ corr_wheel(
   use = "pairwise.complete.obs",
   p_from = c("lower", "upper"),
   r_limits = c(-0.5, 0.5),
-  palette = c("#2166AC", "#FFFFFF", "#B2182B"),
+  palette = NULL,
   start_degree = 90,
   group_gap = 5,
   node_gap = 1.5,
@@ -79,10 +80,30 @@ corr_wheel(
   The order of categories here sets their order around the wheel. If
   `NULL`, all variables share one group.
 
+- scheme:
+
+  A colour scheme providing the base category colours and diverging link
+  palette together. One of:
+
+  - `NULL` (default) – use the package default scheme;
+
+  - a built-in scheme name, see
+    [`corr_wheel_schemes()`](https://kriz98.github.io/circlecorR/reference/corr_wheel_schemes.md)
+    (e.g. `"colorblind"`, `"mono_blue"`, `"vivid"`);
+
+  - a custom `list(colors = , palette = )`, as returned by
+    [`corr_wheel_scheme()`](https://kriz98.github.io/circlecorR/reference/corr_wheel_scheme.md)
+    (optionally tweaked).
+
+  `colors` and `palette` (below), if supplied, override the scheme's
+  corresponding piece – so you can pick a scheme and still tweak one
+  category's colour, for instance.
+
 - colors:
 
-  Named vector mapping category to colour. Missing categories are filled
-  from a default palette.
+  Named vector mapping category to colour, layered on top of `scheme`
+  (or the default palette if `scheme` is `NULL`). Only the categories
+  you name are overridden; others keep the scheme's colour.
 
 - labels:
 
@@ -141,8 +162,9 @@ corr_wheel(
 - palette:
 
   Colours for the diverging link scale at
-  `c(r_limits[1], midpoint, r_limits[2])`. Default is a blue-white-red
-  scale.
+  `c(r_limits[1], midpoint, r_limits[2])`, overriding `scheme`'s. `NULL`
+  (default) uses the scheme's palette, or a blue-white-red scale if
+  `scheme` is also `NULL`.
 
 - start_degree:
 
@@ -221,6 +243,11 @@ when `hide_within_group = TRUE`, within-category correlations. Because
 those redundant comparisons no longer count towards the family, the
 correction is less severe and statistical power improves.
 
+## See also
+
+[`corr_wheel_schemes()`](https://kriz98.github.io/circlecorR/reference/corr_wheel_schemes.md),
+[`corr_wheel_scheme()`](https://kriz98.github.io/circlecorR/reference/corr_wheel_scheme.md)
+
 ## Examples
 
 ``` r
@@ -244,4 +271,9 @@ if (requireNamespace("psych", quietly = TRUE)) {
 data(gastro_cor)
 corr_wheel(gastro_cor, groups = grp, r_threshold = 0.3,
            r_limits = c(-0.6, 0.6))
+
+# A built-in colour scheme, with one category colour overridden
+corr_wheel(gastro_cor, groups = grp, r_threshold = 0.3, scheme = "colorblind",
+           colors = c(Scores = "black"))
+
 ```
