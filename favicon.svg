@@ -1,17 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1039.23" height="1200" viewBox="0 0 1039.23 1200"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description><dc:creator>RealFaviconGenerator</dc:creator><dc:source>https://realfavicongenerator.net</dc:source></rdf:Description></rdf:RDF></metadata><defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.75" y2="1">
+      <stop offset="0%" stop-color="#1878A0"></stop>
+      <stop offset="55%" stop-color="#0D3B5C"></stop>
+      <stop offset="100%" stop-color="#081420"></stop>
+    </linearGradient>
     <clipPath id="hexClip"><path d="M 571.58 30.00 L 987.27 270.00 A 60.00 60.00 0 0 1 1039.23 360.00 L 1039.23 840.00 A 60.00 60.00 0 0 1 987.27 930.00 L 571.58 1170.00 A 60.00 60.00 0 0 1 467.65 1170.00 L 51.96 930.00 A 60.00 60.00 0 0 1 0.00 840.00 L 0.00 360.00 A 60.00 60.00 0 0 1 51.96 270.00 L 467.65 30.00 A 60.00 60.00 0 0 1 571.58 30.00 Z"></path></clipPath>
     <filter id="softShadow" x="-40%" y="-40%" width="180%" height="180%">
-      <feDropShadow dx="0" dy="10" stdDeviation="22" flood-color="#1E3A8A" flood-opacity="0.18"></feDropShadow>
+      <feDropShadow dx="0" dy="10" stdDeviation="22" flood-color="#000000" flood-opacity="0.35"></feDropShadow>
     </filter>
-  </defs><path d="M 571.58 30.00 L 987.27 270.00 A 60.00 60.00 0 0 1 1039.23 360.00 L 1039.23 840.00 A 60.00 60.00 0 0 1 987.27 930.00 L 571.58 1170.00 A 60.00 60.00 0 0 1 467.65 1170.00 L 51.96 930.00 A 60.00 60.00 0 0 1 0.00 840.00 L 0.00 360.00 A 60.00 60.00 0 0 1 51.96 270.00 L 467.65 30.00 A 60.00 60.00 0 0 1 571.58 30.00 Z" fill="#E4EEFC" filter="url(#softShadow)"></path><path d="M 571.58 30.00 L 987.27 270.00 A 60.00 60.00 0 0 1 1039.23 360.00 L 1039.23 840.00 A 60.00 60.00 0 0 1 987.27 930.00 L 571.58 1170.00 A 60.00 60.00 0 0 1 467.65 1170.00 L 51.96 930.00 A 60.00 60.00 0 0 1 0.00 840.00 L 0.00 360.00 A 60.00 60.00 0 0 1 51.96 270.00 L 467.65 30.00 A 60.00 60.00 0 0 1 571.58 30.00 Z" fill="none" stroke="#B9D2F5" stroke-width="3" opacity="0.8"></path><g clip-path="url(#hexClip)">
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="8" result="blur"></feGaussianBlur>
+      <feMerge>
+        <feMergeNode in="blur"></feMergeNode>
+        <feMergeNode in="SourceGraphic"></feMergeNode>
+      </feMerge>
+    </filter>
+  </defs><path d="M 571.58 30.00 L 987.27 270.00 A 60.00 60.00 0 0 1 1039.23 360.00 L 1039.23 840.00 A 60.00 60.00 0 0 1 987.27 930.00 L 571.58 1170.00 A 60.00 60.00 0 0 1 467.65 1170.00 L 51.96 930.00 A 60.00 60.00 0 0 1 0.00 840.00 L 0.00 360.00 A 60.00 60.00 0 0 1 51.96 270.00 L 467.65 30.00 A 60.00 60.00 0 0 1 571.58 30.00 Z" fill="url(#bg)" filter="url(#softShadow)"></path><g clip-path="url(#hexClip)">
     <!-- halo ring, segmented like the category-tile ring in the real plots -->
-    <circle cx="519.6" cy="470.0" r="235.0" fill="none" stroke="#1D4ED8" stroke-width="20" stroke-dasharray="70.9 27.6" stroke-linecap="round" opacity="0.95"></circle>
+    <circle cx="519.6" cy="470.0" r="235.0" fill="none" stroke="#22C3F0" stroke-width="20" stroke-dasharray="70.9 27.6" stroke-linecap="round" opacity="0.95" filter="url(#glow)"></circle>
 
     <!-- correlation chords -->
-    <path d="M 519.6 235.0 Q 552.8 456.2 685.8 636.2" fill="none" stroke="#1D4ED8" stroke-width="10.0" stroke-linecap="round" opacity="0.90"></path>
-    <path d="M 685.8 303.8 Q 505.8 436.8 284.6 470.0" fill="none" stroke="#1D4ED8" stroke-width="8.0" stroke-linecap="round" opacity="0.65"></path>
-    <path d="M 754.6 470.0 Q 533.4 503.2 353.4 636.2" fill="none" stroke="#1D4ED8" stroke-width="9.0" stroke-linecap="round" opacity="0.80"></path>
-    <path d="M 353.4 303.8 Q 519.6 470.0 685.8 636.2" fill="none" stroke="#1D4ED8" stroke-width="7.0" stroke-linecap="round" opacity="0.55"></path>
-    <path d="M 685.8 303.8 Q 552.8 483.8 519.6 705.0" fill="none" stroke="#1D4ED8" stroke-width="8.0" stroke-linecap="round" opacity="0.70"></path>
-    <path d="M 519.6 235.0 Q 486.4 456.2 353.4 636.2" fill="none" stroke="#1D4ED8" stroke-width="7.0" stroke-linecap="round" opacity="0.60"></path>
-  </g><text x="519.6" y="860" text-anchor="middle" font-family="Avenir Next, Century Gothic, Futura, Helvetica Neue, Arial, sans-serif" font-size="98" font-weight="500" fill="#1E293B" letter-spacing="1">circlecorR</text></svg>
+    <path d="M 519.6 235.0 Q 552.8 456.2 685.8 636.2" fill="none" stroke="#22C3F0" stroke-width="10.0" stroke-linecap="round" opacity="0.95"></path>
+    <path d="M 685.8 303.8 Q 505.8 436.8 284.6 470.0" fill="none" stroke="#22C3F0" stroke-width="8.0" stroke-linecap="round" opacity="0.70"></path>
+    <path d="M 754.6 470.0 Q 533.4 503.2 353.4 636.2" fill="none" stroke="#22C3F0" stroke-width="9.0" stroke-linecap="round" opacity="0.85"></path>
+    <path d="M 353.4 303.8 Q 519.6 470.0 685.8 636.2" fill="none" stroke="#22C3F0" stroke-width="7.0" stroke-linecap="round" opacity="0.60"></path>
+    <path d="M 685.8 303.8 Q 552.8 483.8 519.6 705.0" fill="none" stroke="#22C3F0" stroke-width="8.0" stroke-linecap="round" opacity="0.75"></path>
+    <path d="M 519.6 235.0 Q 486.4 456.2 353.4 636.2" fill="none" stroke="#22C3F0" stroke-width="7.0" stroke-linecap="round" opacity="0.65"></path>
+  </g><text x="519.6" y="860" text-anchor="middle" font-family="Avenir Next, Century Gothic, Futura, Helvetica Neue, Arial, sans-serif" font-size="98" font-weight="600" fill="#FFFFFF" letter-spacing="1">circlecorR</text></svg>
