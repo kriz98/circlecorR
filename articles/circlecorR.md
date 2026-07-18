@@ -162,6 +162,15 @@ corr_wheel_schemes()
 #> [1] "default"    "colorblind" "ocean"      "vivid"
 ```
 
+- `"default"` – the seaborn-like categorical palette and a
+  blue-white-red diverging scale used throughout this vignette.
+- `"colorblind"` – the Okabe-Ito categorical palette with a
+  colourblind-safe (PuOr) diverging scale.
+- `"ocean"` – hue-varied cool tones (teal, blue, indigo, violet, slate)
+  for categories, with a blue-to-warm diverging scale.
+- `"vivid"` – a brighter, higher-contrast categorical palette, still
+  paired with the blue-white-red diverging scale.
+
 ``` r
 
 corr_wheel(gastro_symptoms, groups = groups, r_threshold = 0.3,
@@ -212,7 +221,7 @@ corr_wheel(
   gastro_symptoms, groups = groups, r_threshold = 0.3, r_limits = c(-0.6, 0.6),
   scheme = "colorblind",
   colors = c(Scores = "black"),          # override just one category
-  labels = c(`GA-RI` = "Rhythm index")
+  labels = c("GA-RI" = "Rhythm index")
 )
 ```
 

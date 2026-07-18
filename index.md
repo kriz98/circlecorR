@@ -108,7 +108,7 @@ Everything the reference figure controls is a plain argument:
 | Category assignment & order | `groups` | named list *or* `variable = category` vector |
 | Colour scheme (category colours + link palette, together) | `scheme` | `"colorblind"`, `"ocean"`, `"vivid"`, or `list(colors=, palette=)` |
 | Category colours | `colors` | `c(Symptoms = "#55A868", Scores = "#C44E52")` (overrides `scheme` per category) |
-| Pretty variable labels | `labels` | `c(`GA-RI`= "Rhythm index")` |
+| Pretty variable labels | `labels` | `c("GA-RI" = "Rhythm index")` |
 | Significance cutoff | `sig_level` | `0.05` |
 | Multiple-comparison adjustment | `adjust` | `"holm"`, `"hochberg"`, `"BH"`, `"none"` |
 | Minimum \|r\| shown | `r_threshold` | `0.3` |

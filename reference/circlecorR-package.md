@@ -24,4 +24,4 @@ Authors:
 
 - Chris Varghese <chris.varghese@alimetry.com>
 
-- Armen A Gharibans
+- Armen A. Gharibans

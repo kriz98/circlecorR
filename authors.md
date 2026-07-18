@@ -4,7 +4,7 @@
 
 - **Chris Varghese**. Author, maintainer.
 
-- **Armen A Gharibans**. Author.
+- **Armen A. Gharibans**. Author.
 
 ## Citation
 
@@ -16,7 +16,7 @@ Plots*. R package version 0.1.0, <https://kriz98.github.io/circlecorR/>.
 
     @Manual{,
       title = {circlecorR: Circular Correlation Wheel Plots},
-      author = {Chris Varghese and Armen A Gharibans},
+      author = {Chris Varghese and Armen A. Gharibans},
       year = {2026},
       note = {R package version 0.1.0},
       url = {https://kriz98.github.io/circlecorR/},
