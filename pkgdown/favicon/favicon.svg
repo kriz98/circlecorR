@@ -4,7 +4,7 @@
       <stop offset="55%" stop-color="#0D3B5C"></stop>
       <stop offset="100%" stop-color="#081420"></stop>
     </linearGradient>
-    <clipPath id="hexClip"><path d="M 571.58 30.00 L 987.27 270.00 A 60.00 60.00 0 0 1 1039.23 360.00 L 1039.23 840.00 A 60.00 60.00 0 0 1 987.27 930.00 L 571.58 1170.00 A 60.00 60.00 0 0 1 467.65 1170.00 L 51.96 930.00 A 60.00 60.00 0 0 1 0.00 840.00 L 0.00 360.00 A 60.00 60.00 0 0 1 51.96 270.00 L 467.65 30.00 A 60.00 60.00 0 0 1 571.58 30.00 Z"></path></clipPath>
+    <clipPath id="hexClip"><path d="M 519.62 0.00 L 1039.23 300.00 L 1039.23 900.00 L 519.62 1200.00 L 0.00 900.00 L 0.00 300.00 Z"></path></clipPath>
     <filter id="softShadow" x="-40%" y="-40%" width="180%" height="180%">
       <feDropShadow dx="0" dy="10" stdDeviation="22" flood-color="#000000" flood-opacity="0.35"></feDropShadow>
     </filter>
@@ -15,14 +15,14 @@
         <feMergeNode in="SourceGraphic"></feMergeNode>
       </feMerge>
     </filter>
-  </defs><path d="M 571.58 30.00 L 987.27 270.00 A 60.00 60.00 0 0 1 1039.23 360.00 L 1039.23 840.00 A 60.00 60.00 0 0 1 987.27 930.00 L 571.58 1170.00 A 60.00 60.00 0 0 1 467.65 1170.00 L 51.96 930.00 A 60.00 60.00 0 0 1 0.00 840.00 L 0.00 360.00 A 60.00 60.00 0 0 1 51.96 270.00 L 467.65 30.00 A 60.00 60.00 0 0 1 571.58 30.00 Z" fill="url(#bg)" filter="url(#softShadow)"></path><g clip-path="url(#hexClip)">
+  </defs><path d="M 519.62 0.00 L 1039.23 300.00 L 1039.23 900.00 L 519.62 1200.00 L 0.00 900.00 L 0.00 300.00 Z" fill="url(#bg)" filter="url(#softShadow)"></path><g clip-path="url(#hexClip)">
     <!-- halo ring, segmented like the category-tile ring in the real plots -->
     <circle cx="519.6" cy="470.0" r="235.0" fill="none" stroke="#22C3F0" stroke-width="20" stroke-dasharray="70.9 27.6" stroke-linecap="round" opacity="0.95" filter="url(#glow)"></circle>
 
     <!-- correlation chords -->
     <path d="M 519.6 235.0 Q 552.8 456.2 685.8 636.2" fill="none" stroke="#22C3F0" stroke-width="10.0" stroke-linecap="round" opacity="0.95"></path>
     <path d="M 685.8 303.8 Q 505.8 436.8 284.6 470.0" fill="none" stroke="#22C3F0" stroke-width="8.0" stroke-linecap="round" opacity="0.70"></path>
-    <path d="M 754.6 470.0 Q 533.4 503.2 353.4 636.2" fill="none" stroke="#22C3F0" stroke-width="9.0" stroke-linecap="round" opacity="0.85"></path>
+    <path d="M 754.6 470.0 Q 533.4 503.2 353.4 636.2" fill="none" stroke="#F5C518" stroke-width="9.0" stroke-linecap="round" opacity="0.90"></path>
     <path d="M 353.4 303.8 Q 519.6 470.0 685.8 636.2" fill="none" stroke="#22C3F0" stroke-width="7.0" stroke-linecap="round" opacity="0.60"></path>
     <path d="M 685.8 303.8 Q 552.8 483.8 519.6 705.0" fill="none" stroke="#22C3F0" stroke-width="8.0" stroke-linecap="round" opacity="0.75"></path>
     <path d="M 519.6 235.0 Q 486.4 456.2 353.4 636.2" fill="none" stroke="#22C3F0" stroke-width="7.0" stroke-linecap="round" opacity="0.65"></path>

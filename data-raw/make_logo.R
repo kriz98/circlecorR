@@ -4,11 +4,13 @@
 #
 # Design: matches Alimetry's brand ethos (from alimetry.com) -- a dark
 # teal-to-navy diagonal gradient (not a light/pale surface), a vivid electric-
-# cyan accent for the ring and chords (their CTA-button/headline colour), a
-# white wordmark, and softly rounded (squircle-like) corners echoing their
-# rounded-pill buttons/badges. The halo ring stays segmented like the
-# category-tile ring in the actual plots, and the chords stay bold, per
-# earlier feedback for stronger presence.
+# cyan accent for the ring and most chords (their CTA-button/headline
+# colour), one warm gold/yellow chord (the warm end of their blue-to-yellow
+# spectrogram heatmaps), and a white wordmark. The hex itself is the plain
+# sharp-cornered shape standard for R package hex stickers (no rounding).
+# The halo ring stays segmented like the category-tile ring in the actual
+# plots, and the chords stay bold, per earlier feedback for stronger
+# presence.
 #
 # Colours are approximated by eye from screenshots of alimetry.com, not taken
 # from an official brand-colour spec -- swap the hex codes below if exact
@@ -21,37 +23,10 @@ W  <- sqrt(3) * r
 cx <- W / 2
 cy <- H / 2
 
-verts <- rbind(
-  c(cx, 0), c(W, r / 2), c(W, H - r / 2),
-  c(cx, H), c(0, H - r / 2), c(0, r / 2)
+hex <- sprintf(
+  "M %.2f %.2f L %.2f %.2f L %.2f %.2f L %.2f %.2f L %.2f %.2f L %.2f %.2f Z",
+  cx, 0,  W, r / 2,  W, H - r / 2,  cx, H,  0, H - r / 2,  0, r / 2
 )
-
-# Round every corner of a convex polygon by the same radius: at each vertex,
-# move `radius` back along each incident edge and join those two points with
-# a circular arc of that radius -- the standard "squircle-corner" construction.
-rounded_polygon_path <- function(verts, radius) {
-  n <- nrow(verts)
-  get <- function(i) verts[((i - 1) %% n) + 1, ]
-  unit <- function(v) v / sqrt(sum(v^2))
-
-  p1 <- matrix(NA_real_, n, 2); p2 <- matrix(NA_real_, n, 2)
-  for (i in seq_len(n)) {
-    cur <- get(i); prv <- get(i - 1); nxt <- get(i + 1)
-    p1[i, ] <- cur + unit(prv - cur) * radius
-    p2[i, ] <- cur + unit(nxt - cur) * radius
-  }
-
-  d <- sprintf("M %.2f %.2f", p2[1, 1], p2[1, 2])
-  for (i in 2:n) {
-    d <- c(d, sprintf("L %.2f %.2f", p1[i, 1], p1[i, 2]),
-           sprintf("A %.2f %.2f 0 0 1 %.2f %.2f", radius, radius, p2[i, 1], p2[i, 2]))
-  }
-  d <- c(d, sprintf("L %.2f %.2f", p1[1, 1], p1[1, 2]),
-         sprintf("A %.2f %.2f 0 0 1 %.2f %.2f Z", radius, radius, p2[1, 1], p2[1, 2]))
-  paste(d, collapse = " ")
-}
-
-hex <- rounded_polygon_path(verts, radius = 60)
 
 deg2rad <- function(d) d * pi / 180
 
@@ -75,9 +50,11 @@ node_y <- ring_cy + R_ring * sin(deg2rad(node_deg))
 pairs <- rbind(
   c(1, 4), c(2, 7), c(3, 6), c(8, 4), c(2, 5), c(1, 6)
 )
-chord_col <- "#22C3F0"
+# mostly the brand's electric cyan, with one warm gold chord -- the warm end
+# of Alimetry's blue-to-yellow spectrogram heatmaps
+chord_col <- c("#22C3F0", "#22C3F0", "#F5C518", "#22C3F0", "#22C3F0", "#22C3F0")
 chord_w   <- c(10, 8, 9, 7, 8, 7)
-chord_op  <- c(.95, .7, .85, .6, .75, .65)
+chord_op  <- c(.95, .7, .9, .6, .75, .65)
 
 pull <- 0.6   # 0 = straight line, 1 = bow fully through the ring centre
 chords <- vapply(seq_len(nrow(pairs)), function(k) {
@@ -91,7 +68,7 @@ chords <- vapply(seq_len(nrow(pairs)), function(k) {
            'stroke="%s" stroke-width="%.1f" stroke-linecap="round" ',
            'opacity="%.2f"/>'),
     node_x[i], node_y[i], qx, qy, node_x[j], node_y[j],
-    chord_col, chord_w[k], chord_op[k]
+    chord_col[k], chord_w[k], chord_op[k]
   )
 }, character(1))
 

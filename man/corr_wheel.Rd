@@ -68,7 +68,7 @@ diverging link palette together. One of:
 \itemize{
 \item \code{NULL} (default) -- use the package default scheme;
 \item a built-in scheme name, see \code{\link[=corr_wheel_schemes]{corr_wheel_schemes()}} (e.g. \code{"colorblind"},
-\code{"ocean"}, \code{"vivid"});
+\code{"ocean"}, \code{"vivid"}, \code{"alimetry"});
 \item a custom \code{list(colors = , palette = )}, as returned by
 \code{\link[=corr_wheel_scheme]{corr_wheel_scheme()}} (optionally tweaked).
 }

@@ -24,6 +24,16 @@
   vivid = list(
     colors  = c("#EF476F", "#FFB703", "#06D6A0", "#118AB2", "#7B2CBF"),
     palette = c("#2166AC", "#FFFFFF", "#B2182B")
+  ),
+  alimetry = list(
+    # Blues alternating with warm golds, echoing Alimetry's brand palette
+    # (a dark teal-to-navy backdrop with an electric-cyan accent) and the
+    # blue-to-yellow heatmaps in their spectrogram figures. The two yellows
+    # are spread well apart in lightness (rich gold vs. pale lemon) so they
+    # stay distinguishable, rather than reading as near-duplicates. Diverging
+    # scale mirrors that same blue<->yellow visual language.
+    colors  = c("#0D3B5C", "#F5C518", "#1878A0", "#FDE047", "#22C3F0"),
+    palette = c("#1878A0", "#F5F7FF", "#F5C518")
   )
 )
 

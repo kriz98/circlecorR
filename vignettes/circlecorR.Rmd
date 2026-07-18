@@ -152,10 +152,17 @@ corr_wheel_schemes()
   categories, with a blue-to-warm diverging scale.
 * `"vivid"` -- a brighter, higher-contrast categorical palette, still paired
   with the blue-white-red diverging scale.
+* `"alimetry"` -- blues alternating with warm golds, with a matching
+  blue-to-yellow diverging scale.
 
 ```{r scheme-colorblind}
 corr_wheel(gastro_symptoms, groups = groups, r_threshold = 0.3,
           r_limits = c(-0.6, 0.6), scheme = "colorblind")
+```
+
+```{r scheme-alimetry}
+corr_wheel(gastro_symptoms, groups = groups, r_threshold = 0.3,
+          r_limits = c(-0.6, 0.6), scheme = "alimetry")
 ```
 
 `corr_wheel_scheme()` returns a scheme's definition so you can start from a
