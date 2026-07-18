@@ -1,0 +1,35 @@
+Package: circlecorR
+Title: Circular Correlation Wheel Plots
+Version: 0.1.0
+Authors@R: c(
+    person("Chris", "Varghese", email = "chris.varghese@alimetry.com",
+           role = c("aut", "cre")),
+    person("Armen A", "Gharibans", role = "aut"))
+Description: Draws MNE-style circular "correlation wheel" plots natively in R.
+    Variables are arranged around a circle, grouped and colour-tiled by
+    category, and connected by curved links whose colour maps to the
+    correlation coefficient. Non-significant, weak, and within-category
+    correlations can be masked. Correlations can be supplied as pre-computed
+    r/p matrices or computed from raw data via a thin wrapper around
+    'psych::corr.test'. Categories, colours, and labels are all
+    user-configurable.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Depends:
+    R (>= 4.1.0)
+Imports:
+    circlize (>= 0.4.0),
+    graphics,
+    stats
+Suggests:
+    psych,
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+Config/testthat/edition: 3
+LazyData: true
+VignetteBuilder: knitr
+URL: https://kriz98.github.io/circlecorR/, https://github.com/kriz98/circlecorR
+BugReports: https://github.com/kriz98/circlecorR/issues
+Config/roxygen2/version: 8.0.0

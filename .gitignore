@@ -1,0 +1,17 @@
+# R build / check artifacts
+*.tar.gz
+*.Rcheck/
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# pkgdown site is built and deployed by CI (gh-pages), not committed here
+docs/
+
+# knitr scratch output
+/figure/
+/vignettes/*.html
+
+# macOS
+.DS_Store

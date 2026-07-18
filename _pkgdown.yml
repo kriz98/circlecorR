@@ -1,0 +1,27 @@
+url: https://kriz98.github.io/circlecorR/
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left: [intro, reference, articles]
+    right: [github]
+
+reference:
+- title: Plotting
+  contents:
+  - corr_wheel
+- title: Correlations
+  contents:
+  - compute_correlations
+- title: Data
+  contents:
+  - gastro_symptoms
+  - gastro_cor
+
+articles:
+- title: Get started
+  navbar: ~
+  contents:
+  - circlecorR

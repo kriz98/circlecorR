@@ -1,0 +1,189 @@
+---
+title: "Correlation wheel plots with circlecorR"
+output: rmarkdown::html_vignette
+bibliography: references.bib
+vignette: >
+  %\VignetteIndexEntry{Correlation wheel plots with circlecorR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 8,
+  fig.height = 7,
+  dpi = 110,
+  fig.align = "center"
+)
+```
+
+```{r setup}
+library(circlecorR)
+```
+
+## Motivation
+
+A traditional correlation matrix carries a large amount of **redundant
+information**. For $k$ variables it has $k^2$ cells, but only
+$k(k-1)/2$ of them are unique: the diagonal is all self-correlations
+($r = 1$), the two triangles mirror each other, and large blocks of
+*within-category* correlations (symptom--symptom, metric--metric) are often not
+the question being asked. As $k$ grows, the interesting **between-category**
+relationships are buried in this redundancy and the figure becomes unreadable.
+
+The **correlation wheel** was introduced by Gharibans and colleagues to cut
+through this: variables sit around a circle, grouped by category, and only the
+correlations of interest are drawn as curved links coloured by their coefficient
+[@gharibans2019]. `circlecorR` reproduces that figure natively in R and makes
+the grouping, colours, and statistics configurable.
+
+## The simplest path: straight from your data
+
+Most datasets have **one row per subject** and **one column per variable**. You
+do not need to build correlation matrices yourself -- hand that data frame
+directly to `corr_wheel()` and it computes the correlations (and p-values) for
+you.
+
+The only other thing you supply is `groups`: a named list mapping each category
+to its variables. This both **selects** which variables appear (any other
+columns, such as an ID, are ignored) and sets their **order** around the wheel.
+
+```{r groups}
+groups <- list(
+  Demographics = c("Age", "BMI"),
+  Metrics      = c("Amplitude", "Fed-Fasted AR", "Frequency", "GA-RI"),
+  Symptoms     = c("Nausea", "Early satiety", "Bloating",
+                   "Upper GI pain", "Lower GI pain", "Heartburn"),
+  Scores       = c("GCSI", "PAGI-SYM", "PAGI-QoL", "EQ-5D")
+)
+```
+
+```{r raw-data}
+# `gastro_symptoms` is a synthetic per-row example dataset shipped with the package
+head(gastro_symptoms[, 1:5])
+
+corr_wheel(
+  gastro_symptoms,             # raw data: one row per subject
+  groups      = groups,
+  method      = "pearson",     # correlation method
+  adjust      = "hochberg",    # multiple-comparison adjustment (see below)
+  sig_level   = 0.05,          # hide links with adjusted p > 0.05
+  r_threshold = 0.3,           # ...and links with |r| < 0.3
+  r_limits    = c(-0.6, 0.6)
+)
+```
+
+## Hiding self- and within-category correlations
+
+Two of the wheel's most important features are that it **never draws
+self-correlations** (the diagonal) and, by default, **hides within-category
+correlations** (`hide_within_group = TRUE`). This removes exactly the redundant
+parts of the matrix and leaves the between-category structure.
+
+Crucially, this is carried through to the **statistics**. Multiple-comparison
+correction penalises you for the number of hypotheses tested. If self- and
+within-category correlations are never tested, they should not count towards
+that family. `corr_wheel()` therefore applies the adjustment over **only the
+correlations it displays**. Shrinking the family makes the correction less
+severe -- so power improves -- while remaining statistically consistent with
+what is shown.
+
+```{r family}
+res <- corr_wheel(gastro_symptoms, groups = groups, adjust = "hochberg",
+                  r_threshold = 0.3, r_limits = c(-0.6, 0.6))
+
+k <- length(unlist(groups))
+cat("Unique correlations in the full matrix:", k * (k - 1) / 2, "\n")
+cat("Correlations actually tested (the family):", res$n_tests, "\n")
+```
+
+Because the family is smaller, each raw p-value is corrected by a smaller
+factor. Taking Bonferroni for a transparent example, the *same* correlation is
+penalised by the number of tests in its family -- here `r res$n_tests` rather
+than `r k * (k - 1) / 2`:
+
+```{r power}
+p_raw <- 5e-4                       # a raw p-value for one correlation
+k_all <- k * (k - 1) / 2
+
+cat("Bonferroni across the full matrix:", signif(p_raw * k_all, 3), "\n")
+cat("Bonferroni across the family only:", signif(p_raw * res$n_tests, 3), "\n")
+```
+
+The step-up methods (`"holm"`, `"hochberg"`, `"BH"`) behave the same way: fewer
+comparisons never gives a larger adjusted p-value, so hiding redundant
+self- and within-category correlations can only help power.
+
+If you pass a **pre-computed p-value matrix** instead of raw data, it is taken as
+given (no re-adjustment), since it may already be corrected.
+
+## Other inputs
+
+`corr_wheel()` auto-detects what you pass:
+
+* **raw data** (non-square) -- correlations computed for you;
+* a **correlation matrix** plus a matching `p` matrix;
+* a **`circlecor`** object from `compute_correlations()`.
+
+```{r matrices, eval = FALSE}
+r <- as.matrix(read.csv("Rvalues.csv", row.names = 1))
+p <- as.matrix(read.csv("Pvalues.csv", row.names = 1))
+corr_wheel(r, p, groups = groups, r_threshold = 0.3)
+```
+
+## Customising the look
+
+### Colours and labels
+
+`colors` maps categories to colours; `labels` gives pretty display names. Both
+are named vectors -- specify only the ones you want to change.
+
+```{r colours}
+corr_wheel(
+  gastro_symptoms, groups = groups, r_threshold = 0.3, r_limits = c(-0.6, 0.6),
+  colors = c(Demographics = "#4C72B0", Metrics = "#DD8452",
+             Symptoms = "#55A868", Scores = "#C44E52"),
+  labels = c(`GA-RI` = "Rhythm index")
+)
+```
+
+### Size of blocks and lines
+
+* `tile_height` -- radial thickness of the category **blocks** (smaller = thinner).
+* `link_lwd` -- **line** width of the links (larger = thicker).
+
+```{r sizes}
+corr_wheel(
+  gastro_symptoms, groups = groups, r_threshold = 0.3, r_limits = c(-0.6, 0.6),
+  tile_height = 0.12,   # thicker blocks
+  link_lwd    = 3       # thicker lines
+)
+```
+
+### The diverging colour scale
+
+`palette` sets the three colours at `c(-limit, 0, +limit)` and `r_limits` the
+scale range.
+
+```{r palette}
+corr_wheel(
+  gastro_symptoms, groups = groups, r_threshold = 0.3,
+  palette  = c("#2166AC", "white", "#B2182B"),   # blue - white - red
+  r_limits = c(-0.5, 0.5)
+)
+```
+
+## Saving to a file
+
+`corr_wheel()` draws on the active graphics device, so save it the usual way:
+
+```{r save, eval = FALSE}
+png("correlation_wheel.png", width = 2500, height = 2000, res = 300)
+corr_wheel(gastro_symptoms, groups = groups, r_threshold = 0.3,
+           r_limits = c(-0.6, 0.6))
+dev.off()
+```
+
+## References
