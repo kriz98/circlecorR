@@ -12,6 +12,10 @@ reference:
 - title: Plotting
   contents:
   - corr_wheel
+- title: Colour schemes
+  contents:
+  - corr_wheel_schemes
+  - corr_wheel_scheme
 - title: Correlations
   contents:
   - compute_correlations

@@ -73,15 +73,21 @@
   stats::setNames(as.character(groups[vars]), vars)
 }
 
-# Default category colours, close to the seaborn palette used previously.
-.default_group_colors <- function(categories) {
-  # seaborn 'deep'-like palette
-  pal <- c("#4C72B0", "#DD8452", "#55A868", "#C44E52", "#8172B3",
-           "#937860", "#DA8BC3", "#8C8C8C", "#CCB974", "#64B5CD")
+# Cycle an (unnamed) colour vector across a set of categories, recycling if
+# there are more categories than colours.
+.cycle_colors <- function(categories, pal) {
   n <- length(categories)
   cols <- pal[((seq_len(n) - 1) %% length(pal)) + 1]
   stats::setNames(cols, categories)
 }
+
+# Default category colours, close to the seaborn 'deep' palette.
+.default_group_colors <- function(categories) {
+  .cycle_colors(categories, .scheme_registry$default$colors)
+}
+
+# `x %||% y`: return x unless it's NULL, in which case return y.
+`%||%` <- function(x, y) if (is.null(x)) y else x
 
 .default_labels <- function(vars) stats::setNames(vars, vars)
 

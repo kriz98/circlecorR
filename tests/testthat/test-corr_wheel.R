@@ -164,3 +164,54 @@ test_that("p symmetrisation mirrors the requested triangle", {
   up <- .symmetrise_p(m, from = "upper")
   expect_equal(up["a", "b"], 0.9)   # upper-triangle value mirrored down
 })
+
+test_that("corr_wheel_schemes lists the built-in schemes", {
+  s <- corr_wheel_schemes()
+  expect_true(all(c("default", "colorblind", "mono_blue", "vivid") %in% s))
+})
+
+test_that("corr_wheel_scheme returns a colors/palette list", {
+  s <- corr_wheel_scheme("colorblind")
+  expect_true(all(c("colors", "palette") %in% names(s)))
+  expect_length(s$palette, 3)
+  expect_error(corr_wheel_scheme("not_a_scheme"))
+})
+
+test_that("scheme sets category colours and link palette", {
+  pdf(NULL)
+  on.exit(dev.off())
+  s <- corr_wheel_scheme("colorblind")
+  res <- corr_wheel(gastro_cor, groups = grp, scheme = "colorblind")
+  expect_equal(unname(res$colors), .cycle_colors(names(res$colors), s$colors)[names(res$colors)] |> unname())
+  # the diverging palette actually changed the link colour function
+  expect_match(unname(res$col_fun(0)), "^#F7F7F7")
+})
+
+test_that("explicit colors/palette override the scheme on top", {
+  pdf(NULL)
+  on.exit(dev.off())
+  res <- corr_wheel(gastro_cor, groups = grp, scheme = "colorblind",
+                    colors = c(Scores = "#000000"),
+                    palette = c("green", "white", "purple"))
+  expect_equal(unname(res$colors["Scores"]), "#000000")
+  # other categories still come from the scheme, not the default
+  expect_equal(unname(res$colors["Demographics"]),
+              unname(corr_wheel_scheme("colorblind")$colors[1]))
+})
+
+test_that("unknown scheme name errors informatively", {
+  pdf(NULL)
+  on.exit(dev.off())
+  expect_error(corr_wheel(gastro_cor, groups = grp, scheme = "nope"), "Unknown scheme")
+})
+
+test_that("a custom list scheme works and validates palette length", {
+  pdf(NULL)
+  on.exit(dev.off())
+  custom <- list(colors = c("#111111", "#222222"), palette = c("blue", "white", "red"))
+  res <- corr_wheel(gastro_cor, groups = grp, scheme = custom)
+  expect_equal(unname(res$colors["Demographics"]), "#111111")
+
+  bad <- list(colors = c("#111111"), palette = c("blue", "red"))  # length 2, invalid
+  expect_error(corr_wheel(gastro_cor, groups = grp, scheme = bad), "length 3")
+})

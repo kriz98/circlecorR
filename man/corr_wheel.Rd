@@ -8,6 +8,7 @@ corr_wheel(
   r,
   p = NULL,
   groups = NULL,
+  scheme = NULL,
   colors = NULL,
   labels = NULL,
   order = NULL,
@@ -19,7 +20,7 @@ corr_wheel(
   use = "pairwise.complete.obs",
   p_from = c("lower", "upper"),
   r_limits = c(-0.5, 0.5),
-  palette = c("#2166AC", "#FFFFFF", "#B2182B"),
+  palette = NULL,
   start_degree = 90,
   group_gap = 5,
   node_gap = 1.5,
@@ -62,8 +63,23 @@ order), so extra columns such as IDs are simply ignored.}
 order of categories here sets their order around the wheel. If \code{NULL}, all
 variables share one group.}
 
-\item{colors}{Named vector mapping category to colour. Missing categories are
-filled from a default palette.}
+\item{scheme}{A colour scheme providing the base category colours and
+diverging link palette together. One of:
+\itemize{
+\item \code{NULL} (default) -- use the package default scheme;
+\item a built-in scheme name, see \code{\link[=corr_wheel_schemes]{corr_wheel_schemes()}} (e.g. \code{"colorblind"},
+\code{"mono_blue"}, \code{"vivid"});
+\item a custom \code{list(colors = , palette = )}, as returned by
+\code{\link[=corr_wheel_scheme]{corr_wheel_scheme()}} (optionally tweaked).
+}
+
+\code{colors} and \code{palette} (below), if supplied, override the scheme's
+corresponding piece -- so you can pick a scheme and still tweak one
+category's colour, for instance.}
+
+\item{colors}{Named vector mapping category to colour, layered on top of
+\code{scheme} (or the default palette if \code{scheme} is \code{NULL}). Only the
+categories you name are overridden; others keep the scheme's colour.}
 
 \item{labels}{Named vector mapping variable name to a display label. Missing
 entries fall back to the variable name.}
@@ -100,7 +116,9 @@ triangle to mirror: \code{"lower"} (raw p-values, the default) or \code{"upper"}
 (\code{c(vmin, vmax)}). Correlations beyond these are clamped for colour.}
 
 \item{palette}{Colours for the diverging link scale at
-\code{c(r_limits[1], midpoint, r_limits[2])}. Default is a blue-white-red scale.}
+\code{c(r_limits[1], midpoint, r_limits[2])}, overriding \code{scheme}'s. \code{NULL}
+(default) uses the scheme's palette, or a blue-white-red scale if
+\code{scheme} is also \code{NULL}.}
 
 \item{start_degree}{Angle (degrees) of the first variable; 90 places it at
 the top, going clockwise.}
@@ -182,4 +200,11 @@ data(gastro_cor)
 corr_wheel(gastro_cor, groups = grp, r_threshold = 0.3,
            r_limits = c(-0.6, 0.6))
 
+# A built-in colour scheme, with one category colour overridden
+corr_wheel(gastro_cor, groups = grp, r_threshold = 0.3, scheme = "colorblind",
+           colors = c(Scores = "black"))
+
+}
+\seealso{
+\code{\link[=corr_wheel_schemes]{corr_wheel_schemes()}}, \code{\link[=corr_wheel_scheme]{corr_wheel_scheme()}}
 }

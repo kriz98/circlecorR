@@ -49,8 +49,20 @@
 #'   (`variable = category`) or a named list (`category = c(variables)`). The
 #'   order of categories here sets their order around the wheel. If `NULL`, all
 #'   variables share one group.
-#' @param colors Named vector mapping category to colour. Missing categories are
-#'   filled from a default palette.
+#' @param scheme A colour scheme providing the base category colours and
+#'   diverging link palette together. One of:
+#'   * `NULL` (default) -- use the package default scheme;
+#'   * a built-in scheme name, see [corr_wheel_schemes()] (e.g. `"colorblind"`,
+#'     `"mono_blue"`, `"vivid"`);
+#'   * a custom `list(colors = , palette = )`, as returned by
+#'     [corr_wheel_scheme()] (optionally tweaked).
+#'
+#'   `colors` and `palette` (below), if supplied, override the scheme's
+#'   corresponding piece -- so you can pick a scheme and still tweak one
+#'   category's colour, for instance.
+#' @param colors Named vector mapping category to colour, layered on top of
+#'   `scheme` (or the default palette if `scheme` is `NULL`). Only the
+#'   categories you name are overridden; others keep the scheme's colour.
 #' @param labels Named vector mapping variable name to a display label. Missing
 #'   entries fall back to the variable name.
 #' @param order Optional character vector giving an explicit variable order
@@ -69,7 +81,9 @@
 #' @param r_limits Length-2 numeric giving the colour-scale limits
 #'   (`c(vmin, vmax)`). Correlations beyond these are clamped for colour.
 #' @param palette Colours for the diverging link scale at
-#'   `c(r_limits[1], midpoint, r_limits[2])`. Default is a blue-white-red scale.
+#'   `c(r_limits[1], midpoint, r_limits[2])`, overriding `scheme`'s. `NULL`
+#'   (default) uses the scheme's palette, or a blue-white-red scale if
+#'   `scheme` is also `NULL`.
 #' @param start_degree Angle (degrees) of the first variable; 90 places it at
 #'   the top, going clockwise.
 #' @param group_gap,node_gap Gaps (degrees) between categories and between
@@ -116,10 +130,16 @@
 #' corr_wheel(gastro_cor, groups = grp, r_threshold = 0.3,
 #'            r_limits = c(-0.6, 0.6))
 #'
+#' # A built-in colour scheme, with one category colour overridden
+#' corr_wheel(gastro_cor, groups = grp, r_threshold = 0.3, scheme = "colorblind",
+#'            colors = c(Scores = "black"))
+#'
+#' @seealso [corr_wheel_schemes()], [corr_wheel_scheme()]
 #' @export
 corr_wheel <- function(r,
                        p = NULL,
                        groups = NULL,
+                       scheme = NULL,
                        colors = NULL,
                        labels = NULL,
                        order = NULL,
@@ -131,7 +151,7 @@ corr_wheel <- function(r,
                        use = "pairwise.complete.obs",
                        p_from = c("lower", "upper"),
                        r_limits = c(-0.5, 0.5),
-                       palette = c("#2166AC", "#FFFFFF", "#B2182B"),
+                       palette = NULL,
                        start_degree = 90,
                        group_gap = 5,
                        node_gap = 1.5,
@@ -229,7 +249,10 @@ corr_wheel <- function(r,
   grp <- grp[ord_vars]
 
   # ---- Colours --------------------------------------------------------------
-  colmap <- .default_group_colors(cats)
+  # `scheme` supplies a base (category colours + diverging link palette);
+  # explicit `colors`/`palette` arguments override individual pieces on top.
+  scheme_def <- .resolve_scheme(scheme)
+  colmap <- .cycle_colors(cats, scheme_def$colors %||% .scheme_registry$default$colors)
   if (!is.null(colors)) colmap[names(colors)] <- colors
   node_cols <- stats::setNames(colmap[grp], ord_vars)
 
@@ -239,8 +262,10 @@ corr_wheel <- function(r,
     lab_map[common] <- labels[common]
   }
 
+  final_palette <- palette %||% scheme_def$palette %||%
+    .scheme_registry$default$palette
   col_fun <- circlize::colorRamp2(
-    c(r_limits[1], mean(r_limits), r_limits[2]), palette
+    c(r_limits[1], mean(r_limits), r_limits[2]), final_palette
   )
 
   # ---- Family of tested correlations ---------------------------------------

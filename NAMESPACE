@@ -2,3 +2,5 @@
 
 export(compute_correlations)
 export(corr_wheel)
+export(corr_wheel_scheme)
+export(corr_wheel_schemes)
