@@ -1,22 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1039.23" height="1200" viewBox="0 0 1039.23 1200"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description><dc:creator>RealFaviconGenerator</dc:creator><dc:source>https://realfavicongenerator.net</dc:source></rdf:Description></rdf:RDF></metadata><defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
-      <stop offset="0%" stop-color="#1E40AF"></stop>
-      <stop offset="100%" stop-color="#0C1440"></stop>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="#FAFCFF"></stop>
+      <stop offset="100%" stop-color="#CFE0FB"></stop>
     </linearGradient>
-    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#D6EAFF"></stop>
-      <stop offset="100%" stop-color="#4C8DF0"></stop>
-    </linearGradient>
-    <clipPath id="hexClip"><path d="M 519.62 0.00 L 1039.23 300.00 L 1039.23 900.00 L 519.62 1200.00 L 0.00 900.00 L 0.00 300.00 Z"></path></clipPath>
-  </defs><path d="M 519.62 0.00 L 1039.23 300.00 L 1039.23 900.00 L 519.62 1200.00 L 0.00 900.00 L 0.00 300.00 Z" fill="url(#bg)"></path><g clip-path="url(#hexClip)">
+    <clipPath id="hexClip"><path d="M 571.58 30.00 L 987.27 270.00 A 60.00 60.00 0 0 1 1039.23 360.00 L 1039.23 840.00 A 60.00 60.00 0 0 1 987.27 930.00 L 571.58 1170.00 A 60.00 60.00 0 0 1 467.65 1170.00 L 51.96 930.00 A 60.00 60.00 0 0 1 0.00 840.00 L 0.00 360.00 A 60.00 60.00 0 0 1 51.96 270.00 L 467.65 30.00 A 60.00 60.00 0 0 1 571.58 30.00 Z"></path></clipPath>
+    <filter id="softShadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="10" stdDeviation="22" flood-color="#1E3A8A" flood-opacity="0.18"></feDropShadow>
+    </filter>
+  </defs><path d="M 571.58 30.00 L 987.27 270.00 A 60.00 60.00 0 0 1 1039.23 360.00 L 1039.23 840.00 A 60.00 60.00 0 0 1 987.27 930.00 L 571.58 1170.00 A 60.00 60.00 0 0 1 467.65 1170.00 L 51.96 930.00 A 60.00 60.00 0 0 1 0.00 840.00 L 0.00 360.00 A 60.00 60.00 0 0 1 51.96 270.00 L 467.65 30.00 A 60.00 60.00 0 0 1 571.58 30.00 Z" fill="url(#bg)" filter="url(#softShadow)"></path><path d="M 571.58 30.00 L 987.27 270.00 A 60.00 60.00 0 0 1 1039.23 360.00 L 1039.23 840.00 A 60.00 60.00 0 0 1 987.27 930.00 L 571.58 1170.00 A 60.00 60.00 0 0 1 467.65 1170.00 L 51.96 930.00 A 60.00 60.00 0 0 1 0.00 840.00 L 0.00 360.00 A 60.00 60.00 0 0 1 51.96 270.00 L 467.65 30.00 A 60.00 60.00 0 0 1 571.58 30.00 Z" fill="none" stroke="#B9D2F5" stroke-width="3" opacity="0.8"></path><g clip-path="url(#hexClip)">
     <!-- halo ring -->
-    <circle cx="519.6" cy="470.0" r="235.0" fill="none" stroke="url(#ringGrad)" stroke-width="14" opacity="0.95"></circle>
+    <circle cx="519.6" cy="470.0" r="235.0" fill="none" stroke="#2563EB" stroke-width="16" opacity="0.95"></circle>
 
     <!-- correlation chords -->
-    <path d="M 519.6 235.0 Q 551.2 456.9 685.8 636.2" fill="none" stroke="#EAF4FF" stroke-width="7.0" stroke-linecap="round" opacity="0.85"></path>
-    <path d="M 685.8 303.8 Q 506.5 438.4 284.6 470.0" fill="none" stroke="#5EA8F2" stroke-width="6.0" stroke-linecap="round" opacity="0.60"></path>
-    <path d="M 754.6 470.0 Q 532.7 501.6 353.4 636.2" fill="none" stroke="#F0834D" stroke-width="7.0" stroke-linecap="round" opacity="0.85"></path>
-    <path d="M 353.4 303.8 Q 519.6 470.0 685.8 636.2" fill="none" stroke="#2E5FD1" stroke-width="5.0" stroke-linecap="round" opacity="0.50"></path>
-    <path d="M 685.8 303.8 Q 551.2 483.1 519.6 705.0" fill="none" stroke="#8FC1F7" stroke-width="6.0" stroke-linecap="round" opacity="0.55"></path>
-    <path d="M 519.6 235.0 Q 488.0 456.9 353.4 636.2" fill="none" stroke="#F0834D" stroke-width="5.0" stroke-linecap="round" opacity="0.55"></path>
-  </g><text x="519.6" y="860" text-anchor="middle" font-family="Avenir Next, Century Gothic, Futura, Helvetica Neue, Arial, sans-serif" font-size="100" font-weight="500" fill="#F7FAFF" letter-spacing="1.5">circlecorR</text><path d="M 519.62 0.00 L 1039.23 300.00 L 1039.23 900.00 L 519.62 1200.00 L 0.00 900.00 L 0.00 300.00 Z" fill="none" stroke="#9DC4FF" stroke-width="5" opacity="0.45"></path></svg>
+    <path d="M 519.6 235.0 Q 552.8 456.2 685.8 636.2" fill="none" stroke="#2563EB" stroke-width="8.0" stroke-linecap="round" opacity="0.65"></path>
+    <path d="M 685.8 303.8 Q 505.8 436.8 284.6 470.0" fill="none" stroke="#2563EB" stroke-width="6.0" stroke-linecap="round" opacity="0.40"></path>
+    <path d="M 754.6 470.0 Q 533.4 503.2 353.4 636.2" fill="none" stroke="#2563EB" stroke-width="7.0" stroke-linecap="round" opacity="0.55"></path>
+    <path d="M 353.4 303.8 Q 519.6 470.0 685.8 636.2" fill="none" stroke="#2563EB" stroke-width="5.0" stroke-linecap="round" opacity="0.35"></path>
+    <path d="M 685.8 303.8 Q 552.8 483.8 519.6 705.0" fill="none" stroke="#2563EB" stroke-width="6.0" stroke-linecap="round" opacity="0.45"></path>
+    <path d="M 519.6 235.0 Q 486.4 456.2 353.4 636.2" fill="none" stroke="#2563EB" stroke-width="5.0" stroke-linecap="round" opacity="0.38"></path>
+  </g><text x="519.6" y="860" text-anchor="middle" font-family="Avenir Next, Century Gothic, Futura, Helvetica Neue, Arial, sans-serif" font-size="98" font-weight="500" fill="#1E293B" letter-spacing="1">circlecorR</text></svg>
