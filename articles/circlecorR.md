@@ -11,17 +11,21 @@ A traditional correlation matrix carries a large amount of **redundant
 information**. For $`k`$ variables it has $`k^2`$ cells, but only
 $`k(k-1)/2`$ of them are unique: the diagonal is all self-correlations
 ($`r = 1`$), the two triangles mirror each other, and large blocks of
-*within-category* correlations (symptom–symptom, metric–metric) are
-often not the question being asked. As $`k`$ grows, the interesting
+*within-category* correlations are often irrelevant, and contribute to
+reduced statistical power. As $`k`$ grows, the interesting
 **between-category** relationships are buried in this redundancy and the
 figure becomes unreadable.
 
-The **correlation wheel** was introduced by Gharibans and colleagues to
-cut through this: variables sit around a circle, grouped by category,
-and only the correlations of interest are drawn as curved links coloured
-by their coefficient (Gharibans et al. 2019). `circlecorR` reproduces
-that figure natively in R and makes the grouping, colours, and
-statistics configurable.
+The **correlation wheel** was introduced by Gharibans et al in the first
+clinical paper to show that spatial dysrhythmias as measured on the body
+surface, correlated with gastroduodenal symptoms (Gharibans et al.
+2019). The correlation wheel shows variables at the periphery of a
+circle, grouped by category, and only the correlations of interest are
+drawn as curved links coloured by the strength of their coefficient, and
+filtered based on custom statistical significance thresholds.
+`circlecorR` reproduces these features to generate a correlation wheel
+plot using standard patient-per-row type dataframes in R, with
+optionality to customise the grouping, colours, and statistics.
 
 ## Installation
 
@@ -49,14 +53,35 @@ category to its variables. This both **selects** which variables appear
 (any other columns, such as an ID, are ignored) and sets their **order**
 around the wheel.
 
-`gastro_symptoms`, used throughout this vignette, is a synthetic example
-dataset bundled with the package. Because the package sets
-`LazyData: true`, it’s available directly as soon as you
-[`library(circlecorR)`](https://kriz98.github.io/circlecorR/) – no
-[`data()`](https://rdrr.io/r/utils/data.html) call needed. Swap it for
-your own data frame (one row per subject) to use your own data; see
+In homage to Gharibans et al seminal paper, we use a synthetic
+`gastro_symptoms` dataset throughout this vignette (see
 [`?gastro_symptoms`](https://kriz98.github.io/circlecorR/reference/gastro_symptoms.md)
-for its exact shape.
+for its exact shape). This synthetic example dataset is bundled with the
+package. Swap it for your own data frame (one row per subject) to use
+your own data.
+
+Other notable papers with where these figures were used include:
+
+- Gharibans AA, Coleman TP, Mousa H, Kunkel DC. Spatial patterns from
+  high-resolution electrogastrography correlate with severity of
+  symptoms in patients with functional dyspepsia and gastroparesis. Clin
+  Gastroenterol Hepatol. 2019 Dec;17(13):2668–77.
+- Gharibans AA, Calder S, Varghese C, Waite S, Schamberg G, Daker C, et
+  al. Gastric dysfunction in patients with chronic nausea and vomiting
+  syndromes defined by a noninvasive gastric mapping device. Sci Transl
+  Med. 2022 Sept 21;14(663):eabq3544.
+- Wang TH-H, Varghese C, Calder S, Gharibans A, Schamberg G, Bartlett A,
+  et al. Long-term evaluation of gastric electrophysiology, symptoms and
+  quality of life after pancreaticoduodenectomy. HPB (Oxford). 2025
+  Dec;27(12):1535–42.
+- Xu W, Wang T, Foong D, Schamberg G, Evennett N, Beban G, et
+  al. Characterization of gastric dysfunction after fundoplication using
+  body surface gastric mapping. J Gastrointest Surg. 2024
+  Mar;28(3):236–45.
+- Xu W, Gharibans AA, Calder S, Schamberg G, Walters A, Jang J, et
+  al. Defining and phenotyping gastric abnormalities in long-term type 1
+  diabetes using a novel body surface gastric mapping device. Gastro Hep
+  Adv. 2023 Aug 18;2(8):1120–32.
 
 ``` r
 
@@ -99,7 +124,7 @@ corr_wheel(
 Two of the wheel’s most important features are that it **never draws
 self-correlations** (the diagonal) and, by default, **hides
 within-category correlations** (`hide_within_group = TRUE`). This
-removes exactly the redundant parts of the matrix and leaves the
+removes the redundant parts of the matrix and leaves the
 between-category structure.
 
 Crucially, this is carried through to the **statistics**.
@@ -108,8 +133,8 @@ hypotheses tested. If self- and within-category correlations are never
 tested, they should not count towards that family.
 [`corr_wheel()`](https://kriz98.github.io/circlecorR/reference/corr_wheel.md)
 therefore applies the adjustment over **only the correlations it
-displays**. Shrinking the family makes the correction less severe – so
-power improves – while remaining statistically consistent with what is
+displays**. Shrinking the family makes the correction less severe, thus
+improving power, while remaining statistically consistent with what is
 shown.
 
 ``` r
@@ -147,10 +172,9 @@ cat("Bonferroni across the family only:", signif(p_raw * res$n_tests, 3), "\n")
 ```
 
 The step-up methods (`"holm"`, `"hochberg"`, `"BH"`) behave the same
-way: fewer comparisons never gives a larger adjusted p-value, so hiding
-redundant self- and within-category correlations can only help power.
+way.
 
-If you want the correlation and p-value matrices themselves – for a
+If you want the correlation and p-value matrices themselves, for a
 table, a report, or any other purpose –
 [`compute_correlations()`](https://kriz98.github.io/circlecorR/reference/compute_correlations.md)
 is the same function

@@ -75,17 +75,22 @@ cells, but only
 of them are unique: the diagonal is all self-correlations
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">r = 1</annotation></semantics></math>),
 the two triangles mirror each other, and large blocks of
-<em>within-category</em> correlations (symptom–symptom, metric–metric)
-are often not the question being asked. As
+<em>within-category</em> correlations are often irrelevant, and
+contribute to reduced statistical power. As
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
 grows, the interesting <strong>between-category</strong> relationships
 are buried in this redundancy and the figure becomes unreadable.</p>
-<p>The <strong>correlation wheel</strong> was introduced by Gharibans
-and colleagues to cut through this: variables sit around a circle,
-grouped by category, and only the correlations of interest are drawn as
-curved links coloured by their coefficient <span class="citation">(Gharibans et al. 2019)</span>. <code>circlecorR</code>
-reproduces that figure natively in R and makes the grouping, colours,
-and statistics configurable.</p>
+<p>The <strong>correlation wheel</strong> was introduced by Gharibans et
+al in the first clinical paper to show that spatial dysrhythmias as
+measured on the body surface, correlated with gastroduodenal symptoms
+<span class="citation">(Gharibans et al. 2019)</span>. The correlation
+wheel shows variables at the periphery of a circle, grouped by category,
+and only the correlations of interest are drawn as curved links coloured
+by the strength of their coefficient, and filtered based on custom
+statistical significance thresholds. <code>circlecorR</code> reproduces
+these features to generate a correlation wheel plot using standard
+patient-per-row type dataframes in R, with optionality to customise the
+grouping, colours, and statistics.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -110,12 +115,34 @@ mapping each category to its variables. This both
 <strong>selects</strong> which variables appear (any other columns, such
 as an ID, are ignored) and sets their <strong>order</strong> around the
 wheel.</p>
-<p><code>gastro_symptoms</code>, used throughout this vignette, is a
-synthetic example dataset bundled with the package. Because the package
-sets <code>LazyData: true</code>, it’s available directly as soon as you
-<code><a href="https://kriz98.github.io/circlecorR/">library(circlecorR)</a></code> – no <code><a href="https://rdrr.io/r/utils/data.html" class="external-link">data()</a></code> call needed.
-Swap it for your own data frame (one row per subject) to use your own
-data; see <code><a href="../reference/gastro_symptoms.html">?gastro_symptoms</a></code> for its exact shape.</p>
+<p>In homage to Gharibans et al seminal paper, we use a synthetic
+<code>gastro_symptoms</code> dataset throughout this vignette (see
+<code><a href="../reference/gastro_symptoms.html">?gastro_symptoms</a></code> for its exact shape). This synthetic
+example dataset is bundled with the package. Swap it for your own data
+frame (one row per subject) to use your own data.</p>
+<p>Other notable papers with where these figures were used include:</p>
+<ul>
+<li>Gharibans AA, Coleman TP, Mousa H, Kunkel DC. Spatial patterns from
+high-resolution electrogastrography correlate with severity of symptoms
+in patients with functional dyspepsia and gastroparesis. Clin
+Gastroenterol Hepatol. 2019 Dec;17(13):2668–77.</li>
+<li>Gharibans AA, Calder S, Varghese C, Waite S, Schamberg G, Daker C,
+et al. Gastric dysfunction in patients with chronic nausea and vomiting
+syndromes defined by a noninvasive gastric mapping device. Sci Transl
+Med. 2022 Sept 21;14(663):eabq3544.</li>
+<li>Wang TH-H, Varghese C, Calder S, Gharibans A, Schamberg G, Bartlett
+A, et al. Long-term evaluation of gastric electrophysiology, symptoms
+and quality of life after pancreaticoduodenectomy. HPB (Oxford). 2025
+Dec;27(12):1535–42.</li>
+<li>Xu W, Wang T, Foong D, Schamberg G, Evennett N, Beban G, et
+al. Characterization of gastric dysfunction after fundoplication using
+body surface gastric mapping. J Gastrointest Surg. 2024
+Mar;28(3):236–45.</li>
+<li>Xu W, Gharibans AA, Calder S, Schamberg G, Walters A, Jang J, et
+al. Defining and phenotyping gastric abnormalities in long-term type 1
+diabetes using a novel body surface gastric mapping device. Gastro Hep
+Adv. 2023 Aug 18;2(8):1120–32.</li>
+</ul>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  Demographics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Age"</span>, <span class="st">"BMI"</span><span class="op">)</span>,</span>
@@ -152,16 +179,15 @@ data; see <code><a href="../reference/gastro_symptoms.html">?gastro_symptoms</a>
 <p>Two of the wheel’s most important features are that it <strong>never
 draws self-correlations</strong> (the diagonal) and, by default,
 <strong>hides within-category correlations</strong>
-(<code>hide_within_group = TRUE</code>). This removes exactly the
-redundant parts of the matrix and leaves the between-category
-structure.</p>
+(<code>hide_within_group = TRUE</code>). This removes the redundant
+parts of the matrix and leaves the between-category structure.</p>
 <p>Crucially, this is carried through to the
 <strong>statistics</strong>. Multiple-comparison correction penalises
 you for the number of hypotheses tested. If self- and within-category
 correlations are never tested, they should not count towards that
 family. <code><a href="../reference/corr_wheel.html">corr_wheel()</a></code> therefore applies the adjustment over
 <strong>only the correlations it displays</strong>. Shrinking the family
-makes the correction less severe – so power improves – while remaining
+makes the correction less severe, thus improving power, while remaining
 statistically consistent with what is shown.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span><span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, adjust <span class="op">=</span> <span class="st">"hochberg"</span>,</span>
@@ -187,10 +213,8 @@ family – here 92 rather than 120:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Bonferroni across the family only:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="va">p_raw</span> <span class="op">*</span> <span class="va">res</span><span class="op">$</span><span class="va">n_tests</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Bonferroni across the family only: 0.046</span></span></code></pre></div>
 <p>The step-up methods (<code>"holm"</code>, <code>"hochberg"</code>,
-<code>"BH"</code>) behave the same way: fewer comparisons never gives a
-larger adjusted p-value, so hiding redundant self- and within-category
-correlations can only help power.</p>
-<p>If you want the correlation and p-value matrices themselves – for a
+<code>"BH"</code>) behave the same way.</p>
+<p>If you want the correlation and p-value matrices themselves, for a
 table, a report, or any other purpose –
 <code><a href="../reference/compute_correlations.html">compute_correlations()</a></code> is the same function
 <code><a href="../reference/corr_wheel.html">corr_wheel()</a></code> calls internally, available on its own:</p>

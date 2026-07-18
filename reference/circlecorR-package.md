@@ -18,10 +18,10 @@ Useful links:
 
 ## Author
 
-**Maintainer**: Chris Varghese <chris.varghese@alimetry.com>
+**Maintainer**: Chris Varghese <chris.varghese@auckland.ac.nz>
 
 Authors:
 
-- Chris Varghese <chris.varghese@alimetry.com>
+- Chris Varghese <chris.varghese@auckland.ac.nz>
 
 - Armen A. Gharibans

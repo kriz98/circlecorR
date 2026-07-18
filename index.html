@@ -16,8 +16,8 @@
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Circular Correlation Wheel Plots">
-<meta name="description" content='Draws circular "correlation wheel" plots (as popularised by the MNE Python library) natively in R, straight from a data frame of one row per observation. Variables are arranged around a circle, grouped and colour-tiled by category, and connected by curved links whose colour maps to the correlation coefficient, computed via a thin wrapper around corr.test() from the psych package. Non-significant, weak, and within-category correlations can be masked. Categories, colours, and labels are all user-configurable.'>
-<meta property="og:description" content='Draws circular "correlation wheel" plots (as popularised by the MNE Python library) natively in R, straight from a data frame of one row per observation. Variables are arranged around a circle, grouped and colour-tiled by category, and connected by curved links whose colour maps to the correlation coefficient, computed via a thin wrapper around corr.test() from the psych package. Non-significant, weak, and within-category correlations can be masked. Categories, colours, and labels are all user-configurable.'>
+<meta name="description" content='Draws circular "correlation wheel" plots in R, straight from a data frame of one row per observation. Variables are arranged around a circle, grouped and colour-tiled by category, and connected by curved links whose colour maps to the correlation coefficient, computed via a thin wrapper around corr.test() from the psych package. Non-significant, weak, and within-category correlations can be masked. Categories, colours, and labels are all user-configurable.'>
+<meta property="og:description" content='Draws circular "correlation wheel" plots in R, straight from a data frame of one row per observation. Variables are arranged around a circle, grouped and colour-tiled by category, and connected by curved links whose colour maps to the correlation coefficient, computed via a thin wrapper around corr.test() from the psych package. Non-significant, weak, and within-category correlations can be masked. Categories, colours, and labels are all user-configurable.'>
 <meta property="og:image" content="https://kriz98.github.io/circlecorR/logo.svg">
 </head>
 <body>
@@ -57,8 +57,8 @@
 <!-- badges: start -->
 <!-- badges: end -->
 <p><strong>Circular correlation “wheel” plots in native R.</strong></p>
-<p><code>circlecorR</code> draws <strong>correlation wheel</strong> plots — variables arranged around a ring, grouped and colour-tiled by category, connected by curved links whose colour maps to the correlation coefficient — using <a href="https://github.com/jokergoo/circlize" class="external-link"><code>circlize</code></a>. It replaces the older R → Python (<code>mne.viz.plot_connectivity_circle</code>) round-trip with a single R call.</p>
-<p>A traditional correlation matrix is mostly redundant: a diagonal of self-correlations, two mirror-image triangles, and blocks of within-category correlations that bury the between-category relationships you care about. The wheel — introduced by Gharibans et al. (2019) — keeps only those relationships. Hiding self- and within-category correlations also <strong>removes them from the multiple-comparison family</strong>, which improves statistical power (see <code><a href="articles/circlecorR.html">vignette("circlecorR")</a></code>).</p>
+<p><code>circlecorR</code> draws <strong>correlation wheel</strong> plots with variables arranged around a ring, grouped and colour-tiled by category, connected by curved links whose colour maps to the correlation coefficient using <a href="https://github.com/jokergoo/circlize" class="external-link"><code>circlize</code></a>.</p>
+<p>A traditional correlation matrix is mostly redundant. A diagonal of self-correlations, two mirror-image triangles, and blocks of within-category correlations bury the between-category relationships we care about. The wheel, first seen in Gharibans et al. (2019), keeps only the relationships of interest. Hiding self- and within-category correlations also <strong>removes them from the multiple-comparison family</strong>, which improves statistical power (see <code><a href="articles/circlecorR.html">vignette("circlecorR")</a></code>).</p>
 <div class="float">
 <img src="reference/figures/example_wheel.png" alt="Example correlation wheel"><div class="figcaption">Example correlation wheel</div>
 </div>
@@ -74,7 +74,7 @@
 <div class="section level2">
 <h2 id="quick-start--straight-from-your-data">Quick start — straight from your data<a class="anchor" aria-label="anchor" href="#quick-start--straight-from-your-data"></a>
 </h2>
-<p><code>circlecorR</code> is designed to work straight from a data frame – <strong>one row per subject, one column per variable</strong> – with no separate step to build correlation matrices yourself. Hand that data frame to <code><a href="reference/corr_wheel.html">corr_wheel()</a></code> and it computes the correlations and p-values for you. The only other thing you supply is <code>groups</code>, which both selects the variables and orders them around the wheel (extra columns like IDs are ignored).</p>
+<p><code>circlecorR</code> is designed to work straight from a data frame, <strong>one row per subject, one column per variable</strong>, with no separate step to build correlation matrices yourself. Hand that data frame to <code><a href="reference/corr_wheel.html">corr_wheel()</a></code> and it computes the correlations and p-values for you. The only other thing you supply is <code>groups</code>, which both selects the variables and orders them around the wheel (extra columns like IDs are ignored).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://kriz98.github.io/circlecorR/">circlecorR</a></span><span class="op">)</span></span>
 <span></span>
@@ -232,9 +232,17 @@
 <p>The correlations left after step 1 form the <strong>family</strong> of comparisons. The <code>adjust</code> correction is applied over <strong>only that family</strong> — so redundant self- and within-category correlations don’t inflate the count, and power improves. <code><a href="reference/corr_wheel.html">corr_wheel()</a></code> returns <code>n_tests</code> (the family size) and the family-adjusted p-matrix for reporting.</p>
 </div>
 <div class="section level2">
-<h2 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
+<p>The correlation wheel was introduced in:</p>
 <p>Gharibans AA, Coleman TP, Mousa H, Kunkel DC. Spatial patterns from high-resolution electrogastrography correlate with severity of symptoms in patients with functional dyspepsia and gastroparesis. <em>Clin Gastroenterol Hepatol.</em> 2019 Dec;17(13):2668–77.</p>
+<p>It has since been used in several other gastric physiology studies:</p>
+<ul>
+<li>Gharibans AA, Calder S, Varghese C, Waite S, Schamberg G, Daker C, et al. Gastric dysfunction in patients with chronic nausea and vomiting syndromes defined by a noninvasive gastric mapping device. <em>Sci Transl Med.</em> 2022 Sep 21;14(663):eabq3544.</li>
+<li>Wang TH-H, Varghese C, Calder S, Gharibans A, Schamberg G, Bartlett A, et al. Long-term evaluation of gastric electrophysiology, symptoms and quality of life after pancreaticoduodenectomy. <em>HPB (Oxford).</em> 2025 Dec;27(12):1535–42.</li>
+<li>Xu W, Wang T, Foong D, Schamberg G, Evennett N, Beban G, et al. Characterization of gastric dysfunction after fundoplication using body surface gastric mapping. <em>J Gastrointest Surg.</em> 2024 Mar;28(3):236–45.</li>
+<li>Xu W, Gharibans AA, Calder S, Schamberg G, Walters A, Jang J, et al. Defining and phenotyping gastric abnormalities in long-term type 1 diabetes using a novel body surface gastric mapping device. <em>Gastro Hep Adv.</em> 2023 Aug 18;2(8):1120–32.</li>
+</ul>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

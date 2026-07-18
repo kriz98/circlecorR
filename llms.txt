@@ -2,20 +2,18 @@
 
 **Circular correlation “wheel” plots in native R.**
 
-`circlecorR` draws **correlation wheel** plots — variables arranged
+`circlecorR` draws **correlation wheel** plots with variables arranged
 around a ring, grouped and colour-tiled by category, connected by curved
-links whose colour maps to the correlation coefficient — using
-[`circlize`](https://github.com/jokergoo/circlize). It replaces the
-older R → Python (`mne.viz.plot_connectivity_circle`) round-trip with a
-single R call.
+links whose colour maps to the correlation coefficient using
+[`circlize`](https://github.com/jokergoo/circlize).
 
-A traditional correlation matrix is mostly redundant: a diagonal of
+A traditional correlation matrix is mostly redundant. A diagonal of
 self-correlations, two mirror-image triangles, and blocks of
-within-category correlations that bury the between-category
-relationships you care about. The wheel — introduced by Gharibans et
-al. (2019) — keeps only those relationships. Hiding self- and
-within-category correlations also **removes them from the
-multiple-comparison family**, which improves statistical power (see
+within-category correlations bury the between-category relationships we
+care about. The wheel, first seen in Gharibans et al. (2019), keeps only
+the relationships of interest. Hiding self- and within-category
+correlations also **removes them from the multiple-comparison family**,
+which improves statistical power (see
 [`vignette("circlecorR")`](https://kriz98.github.io/circlecorR/articles/circlecorR.md)).
 
 ![Example correlation wheel](reference/figures/example_wheel.png)
@@ -37,8 +35,8 @@ command above.
 
 ## Quick start — straight from your data
 
-`circlecorR` is designed to work straight from a data frame – **one row
-per subject, one column per variable** – with no separate step to build
+`circlecorR` is designed to work straight from a data frame, **one row
+per subject, one column per variable**, with no separate step to build
 correlation matrices yourself. Hand that data frame to
 [`corr_wheel()`](https://kriz98.github.io/circlecorR/reference/corr_wheel.md)
 and it computes the correlations and p-values for you. The only other
@@ -145,12 +143,33 @@ count, and power improves.
 returns `n_tests` (the family size) and the family-adjusted p-matrix for
 reporting.
 
-## Reference
+## References
+
+The correlation wheel was introduced in:
 
 Gharibans AA, Coleman TP, Mousa H, Kunkel DC. Spatial patterns from
 high-resolution electrogastrography correlate with severity of symptoms
 in patients with functional dyspepsia and gastroparesis. *Clin
 Gastroenterol Hepatol.* 2019 Dec;17(13):2668–77.
+
+It has since been used in several other gastric physiology studies:
+
+- Gharibans AA, Calder S, Varghese C, Waite S, Schamberg G, Daker C, et
+  al. Gastric dysfunction in patients with chronic nausea and vomiting
+  syndromes defined by a noninvasive gastric mapping device. *Sci Transl
+  Med.* 2022 Sep 21;14(663):eabq3544.
+- Wang TH-H, Varghese C, Calder S, Gharibans A, Schamberg G, Bartlett A,
+  et al. Long-term evaluation of gastric electrophysiology, symptoms and
+  quality of life after pancreaticoduodenectomy. *HPB (Oxford).* 2025
+  Dec;27(12):1535–42.
+- Xu W, Wang T, Foong D, Schamberg G, Evennett N, Beban G, et al.
+  Characterization of gastric dysfunction after fundoplication using
+  body surface gastric mapping. *J Gastrointest Surg.* 2024
+  Mar;28(3):236–45.
+- Xu W, Gharibans AA, Calder S, Schamberg G, Walters A, Jang J, et al.
+  Defining and phenotyping gastric abnormalities in long-term type 1
+  diabetes using a novel body surface gastric mapping device. *Gastro
+  Hep Adv.* 2023 Aug 18;2(8):1120–32.
 
 # Package index
 
