@@ -89,7 +89,7 @@ corr_wheel(
 
   - a built-in scheme name, see
     [`corr_wheel_schemes()`](https://kriz98.github.io/circlecorR/reference/corr_wheel_schemes.md)
-    (e.g. `"colorblind"`, `"mono_blue"`, `"vivid"`);
+    (e.g. `"colorblind"`, `"ocean"`, `"vivid"`);
 
   - a custom `list(colors = , palette = )`, as returned by
     [`corr_wheel_scheme()`](https://kriz98.github.io/circlecorR/reference/corr_wheel_scheme.md)

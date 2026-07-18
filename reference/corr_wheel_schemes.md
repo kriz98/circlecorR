@@ -23,5 +23,5 @@ A character vector of scheme names.
 
 ``` r
 corr_wheel_schemes()
-#> [1] "default"    "colorblind" "mono_blue"  "vivid"     
+#> [1] "default"    "colorblind" "ocean"      "vivid"     
 ```

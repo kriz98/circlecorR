@@ -159,7 +159,7 @@ together, as one named preset. Built-in options are listed by
 ``` r
 
 corr_wheel_schemes()
-#> [1] "default"    "colorblind" "mono_blue"  "vivid"
+#> [1] "default"    "colorblind" "ocean"      "vivid"
 ```
 
 ``` r
@@ -176,7 +176,7 @@ it – here, lightening the midpoint of the diverging scale:
 
 ``` r
 
-s <- corr_wheel_scheme("mono_blue")
+s <- corr_wheel_scheme("ocean")
 s$palette[2] <- "grey96"
 corr_wheel(gastro_symptoms, groups = groups, r_threshold = 0.3,
           r_limits = c(-0.6, 0.6), scheme = s)
