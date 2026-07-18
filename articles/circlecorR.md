@@ -33,19 +33,14 @@ remotes::install_github("kriz98/circlecorR", build_vignettes = TRUE)
 
 *(CRAN release pending.)*
 
-`circlecorR` needs `circlize`; `psych` is only required if you let the
-package compute correlations for you (the raw-data path below).
-
-``` r
-
-install.packages(c("circlize", "psych"))
-```
+Dependencies (`circlize` and `psych`) install automatically with the
+command above.
 
 ## Quick start: straight from your data
 
-Most datasets have **one row per subject** and **one column per
-variable**. You do not need to build correlation matrices yourself –
-hand that data frame directly to
+`circlecorR` is designed to work straight from a data frame – **one row
+per subject** and **one column per variable** – with no separate step to
+build correlation matrices yourself. Hand that data frame directly to
 [`corr_wheel()`](https://kriz98.github.io/circlecorR/reference/corr_wheel.md)
 and it computes the correlations (and p-values) for you.
 
@@ -53,6 +48,15 @@ The only other thing you supply is `groups`: a named list mapping each
 category to its variables. This both **selects** which variables appear
 (any other columns, such as an ID, are ignored) and sets their **order**
 around the wheel.
+
+`gastro_symptoms`, used throughout this vignette, is a synthetic example
+dataset bundled with the package. Because the package sets
+`LazyData: true`, it’s available directly as soon as you
+[`library(circlecorR)`](https://kriz98.github.io/circlecorR/) – no
+[`data()`](https://rdrr.io/r/utils/data.html) call needed. Swap it for
+your own data frame (one row per subject) to use your own data; see
+[`?gastro_symptoms`](https://kriz98.github.io/circlecorR/reference/gastro_symptoms.md)
+for its exact shape.
 
 ``` r
 
@@ -146,24 +150,29 @@ The step-up methods (`"holm"`, `"hochberg"`, `"BH"`) behave the same
 way: fewer comparisons never gives a larger adjusted p-value, so hiding
 redundant self- and within-category correlations can only help power.
 
-If you pass a **pre-computed p-value matrix** instead of raw data, it is
-taken as given (no re-adjustment), since it may already be corrected.
-
-## Other inputs
-
+If you want the correlation and p-value matrices themselves – for a
+table, a report, or any other purpose –
+[`compute_correlations()`](https://kriz98.github.io/circlecorR/reference/compute_correlations.md)
+is the same function
 [`corr_wheel()`](https://kriz98.github.io/circlecorR/reference/corr_wheel.md)
-auto-detects what you pass:
-
-- **raw data** (non-square) – correlations computed for you;
-- a **correlation matrix** plus a matching `p` matrix;
-- a **`circlecor`** object from
-  [`compute_correlations()`](https://kriz98.github.io/circlecorR/reference/compute_correlations.md).
+calls internally, available on its own:
 
 ``` r
 
-r <- as.matrix(read.csv("Rvalues.csv", row.names = 1))
-p <- as.matrix(read.csv("Pvalues.csv", row.names = 1))
-corr_wheel(r, p, groups = groups, r_threshold = 0.3)
+cc <- compute_correlations(gastro_symptoms, method = "pearson")
+str(cc)
+#> List of 4
+#>  $ r     : num [1:16, 1:16] 1 0.000715 -0.094705 -0.208429 -0.007022 ...
+#>   ..- attr(*, "dimnames")=List of 2
+#>   .. ..$ : chr [1:16] "Age" "BMI" "Amplitude" "Fed-Fasted AR" ...
+#>   .. ..$ : chr [1:16] "Age" "BMI" "Amplitude" "Fed-Fasted AR" ...
+#>  $ p     : num [1:16, 1:16] 0 0.9944 0.3486 0.0374 0.9447 ...
+#>   ..- attr(*, "dimnames")=List of 2
+#>   .. ..$ : chr [1:16] "Age" "BMI" "Amplitude" "Fed-Fasted AR" ...
+#>   .. ..$ : chr [1:16] "Age" "BMI" "Amplitude" "Fed-Fasted AR" ...
+#>  $ n     : num 100
+#>  $ method: chr "pearson"
+#>  - attr(*, "class")= chr "circlecor"
 ```
 
 ## Customising the look

@@ -65,10 +65,8 @@ and `hide_within_group` arguments of
 ## Examples
 
 ``` r
-if (requireNamespace("psych", quietly = TRUE)) {
-  cc <- compute_correlations(mtcars, method = "pearson")
-  str(cc)
-}
+cc <- compute_correlations(mtcars, method = "pearson")
+str(cc)
 #> List of 4
 #>  $ r     : num [1:11, 1:11] 1 -0.852 -0.848 -0.776 0.681 ...
 #>   ..- attr(*, "dimnames")=List of 2

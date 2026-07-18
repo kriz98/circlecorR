@@ -10,8 +10,7 @@ within-category correlations are masked. This reproduces the MNE-style
 
 ``` r
 corr_wheel(
-  r,
-  p = NULL,
+  data,
   groups = NULL,
   scheme = NULL,
   colors = NULL,
@@ -23,7 +22,6 @@ corr_wheel(
   method = c("pearson", "spearman", "kendall"),
   adjust = "holm",
   use = "pairwise.complete.obs",
-  p_from = c("lower", "upper"),
   r_limits = c(-0.5, 0.5),
   palette = NULL,
   start_degree = 90,
@@ -46,32 +44,15 @@ corr_wheel(
 
 ## Arguments
 
-- r:
+- data:
 
-  One of three things, auto-detected:
-
-  - **raw data** – a data frame or matrix with one row per observation
-    (e.g. one row per patient) and variables in columns. Correlations
-    and p-values are computed for you via
-    [`compute_correlations()`](https://kriz98.github.io/circlecorR/reference/compute_correlations.md)
-    using `method`, `adjust`, and `use`. This is the simplest entry
-    point.
-
-  - a **correlation matrix** (square, with variable names as dimnames),
-    or a data frame of one; pass matching p-values via `p`.
-
-  - a **`"circlecor"`** object from
-    [`compute_correlations()`](https://kriz98.github.io/circlecorR/reference/compute_correlations.md);
-    its `p` matrix is used and the `p` argument is ignored.
-
-  When `groups` is supplied, only the variables it names are used (in
-  that order), so extra columns such as IDs are simply ignored.
-
-- p:
-
-  Optional matching matrix of p-values. If supplied, links with
-  `p > sig_level` are hidden. Ignored for raw data and `"circlecor"`
-  inputs (computed instead).
+  A data frame or matrix with **one row per observation** (e.g. one row
+  per patient) and variables in columns. Correlations and p-values are
+  computed for you via
+  [`compute_correlations()`](https://kriz98.github.io/circlecorR/reference/compute_correlations.md)
+  using `method`, `adjust`, and `use`. When `groups` is supplied, only
+  the variables it names are used (in that order), so extra columns such
+  as an ID are simply ignored.
 
 - groups:
 
@@ -117,8 +98,8 @@ corr_wheel(
 
 - sig_level:
 
-  Significance threshold; links with `p > sig_level` are hidden. Only
-  used when a p-value matrix is available.
+  Significance threshold; links with adjusted `p > sig_level` are
+  hidden.
 
 - r_threshold:
 
@@ -134,9 +115,8 @@ corr_wheel(
 - method, use:
 
   Passed to
-  [`compute_correlations()`](https://kriz98.github.io/circlecorR/reference/compute_correlations.md)
-  when `r` is raw data: the correlation method and the missing-value
-  handling. Ignored otherwise.
+  [`compute_correlations()`](https://kriz98.github.io/circlecorR/reference/compute_correlations.md):
+  the correlation method and the missing-value handling.
 
 - adjust:
 
@@ -144,15 +124,7 @@ corr_wheel(
   the displayed family of correlations (see Details). Any method
   accepted by
   [`stats::p.adjust()`](https://rdrr.io/r/stats/p.adjust.html) (e.g.
-  `"holm"`, `"hochberg"`, `"BH"`, `"bonferroni"`, `"none"`). Used only
-  when the p-values are raw (raw-data or `"circlecor"` input); a
-  user-supplied `p` matrix is taken as given.
-
-- p_from:
-
-  When a p-value matrix is asymmetric (as from `psych`), which triangle
-  to mirror: `"lower"` (raw p-values, the default) or `"upper"`
-  (adjusted).
+  `"holm"`, `"hochberg"`, `"BH"`, `"bonferroni"`, `"none"`).
 
 - r_limits:
 
@@ -234,17 +206,15 @@ default the **between-category** correlations, with self- and
 within-category correlations hidden.
 
 This is not only a display choice; it is carried through to the
-statistics. When the p-values are computed from raw data (or supplied
-via a
-[`compute_correlations()`](https://kriz98.github.io/circlecorR/reference/compute_correlations.md)
-object), the multiple-comparison adjustment (`adjust`) is applied over
-**only the family of correlations shown** – i.e. excluding self- and,
-when `hide_within_group = TRUE`, within-category correlations. Because
-those redundant comparisons no longer count towards the family, the
-correction is less severe and statistical power improves.
+statistics. The multiple-comparison adjustment (`adjust`) is applied
+over **only the family of correlations shown** – i.e. excluding self-
+and, when `hide_within_group = TRUE`, within-category correlations.
+Because those redundant comparisons no longer count towards the family,
+the correction is less severe and statistical power improves.
 
 ## See also
 
+[`compute_correlations()`](https://kriz98.github.io/circlecorR/reference/compute_correlations.md),
 [`corr_wheel_schemes()`](https://kriz98.github.io/circlecorR/reference/corr_wheel_schemes.md),
 [`corr_wheel_scheme()`](https://kriz98.github.io/circlecorR/reference/corr_wheel_scheme.md)
 
@@ -259,21 +229,14 @@ grp <- list(
   Scores       = c("GCSI", "PAGI-SYM", "PAGI-QoL", "EQ-5D")
 )
 
-# Simplest: straight from a per-row data frame (correlations computed for you)
-data(gastro_symptoms)
-if (requireNamespace("psych", quietly = TRUE)) {
-  corr_wheel(gastro_symptoms, groups = grp, r_threshold = 0.3,
-             r_limits = c(-0.6, 0.6))
-}
-
-
-# Or from pre-computed matrices / a circlecor object
-data(gastro_cor)
-corr_wheel(gastro_cor, groups = grp, r_threshold = 0.3,
+# `gastro_symptoms` is a synthetic example dataset bundled with the package
+# (available directly after library(circlecorR) -- no need to call data()).
+corr_wheel(gastro_symptoms, groups = grp, r_threshold = 0.3,
            r_limits = c(-0.6, 0.6))
 
+
 # A built-in colour scheme, with one category colour overridden
-corr_wheel(gastro_cor, groups = grp, r_threshold = 0.3, scheme = "colorblind",
-           colors = c(Scores = "black"))
+corr_wheel(gastro_symptoms, groups = grp, r_threshold = 0.3,
+           scheme = "colorblind", colors = c(Scores = "black"))
 
 ```

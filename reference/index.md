@@ -21,5 +21,3 @@
 
 - [`gastro_symptoms`](https://kriz98.github.io/circlecorR/reference/gastro_symptoms.md)
   : Synthetic gastric-symptom dataset
-- [`gastro_cor`](https://kriz98.github.io/circlecorR/reference/gastro_cor.md)
-  : Correlation matrices for the synthetic gastric-symptom dataset

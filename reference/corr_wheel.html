@@ -49,8 +49,7 @@ natively in R using <span class="pkg">circlize</span>.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">corr_wheel</span><span class="op">(</span></span>
-<span>  <span class="va">r</span>,</span>
-<span>  p <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">data</span>,</span>
 <span>  groups <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scheme <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  colors <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -62,7 +61,6 @@ natively in R using <span class="pkg">circlize</span>.</p>
 <span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pearson"</span>, <span class="st">"spearman"</span>, <span class="st">"kendall"</span><span class="op">)</span>,</span>
 <span>  adjust <span class="op">=</span> <span class="st">"holm"</span>,</span>
 <span>  use <span class="op">=</span> <span class="st">"pairwise.complete.obs"</span>,</span>
-<span>  p_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lower"</span>, <span class="st">"upper"</span><span class="op">)</span>,</span>
 <span>  r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>,</span>
 <span>  palette <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  start_degree <span class="op">=</span> <span class="fl">90</span>,</span>
@@ -87,23 +85,12 @@ natively in R using <span class="pkg">circlize</span>.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-r">r<a class="anchor" aria-label="anchor" href="#arg-r"></a></dt>
-<dd><p>One of three things, auto-detected:</p><ul><li><p><strong>raw data</strong> – a data frame or matrix with one row per observation
-(e.g. one row per patient) and variables in columns. Correlations and
-p-values are computed for you via <code><a href="compute_correlations.html">compute_correlations()</a></code> using
-<code>method</code>, <code>adjust</code>, and <code>use</code>. This is the simplest entry point.</p></li>
-<li><p>a <strong>correlation matrix</strong> (square, with variable names as dimnames), or a
-data frame of one; pass matching p-values via <code>p</code>.</p></li>
-<li><p>a <strong><code>"circlecor"</code></strong> object from <code><a href="compute_correlations.html">compute_correlations()</a></code>; its <code>p</code> matrix
-is used and the <code>p</code> argument is ignored.</p></li>
-</ul><p>When <code>groups</code> is supplied, only the variables it names are used (in that
-order), so extra columns such as IDs are simply ignored.</p></dd>
-
-
-<dt id="arg-p">p<a class="anchor" aria-label="anchor" href="#arg-p"></a></dt>
-<dd><p>Optional matching matrix of p-values. If supplied, links with
-<code>p &gt; sig_level</code> are hidden. Ignored for raw data and <code>"circlecor"</code> inputs
-(computed instead).</p></dd>
+<dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
+<dd><p>A data frame or matrix with <strong>one row per observation</strong> (e.g. one
+row per patient) and variables in columns. Correlations and p-values are
+computed for you via <code><a href="compute_correlations.html">compute_correlations()</a></code> using <code>method</code>, <code>adjust</code>,
+and <code>use</code>. When <code>groups</code> is supplied, only the variables it names are used
+(in that order), so extra columns such as an ID are simply ignored.</p></dd>
 
 
 <dt id="arg-groups">groups<a class="anchor" aria-label="anchor" href="#arg-groups"></a></dt>
@@ -143,8 +130,8 @@ variable.</p></dd>
 
 
 <dt id="arg-sig-level">sig_level<a class="anchor" aria-label="anchor" href="#arg-sig-level"></a></dt>
-<dd><p>Significance threshold; links with <code>p &gt; sig_level</code> are
-hidden. Only used when a p-value matrix is available.</p></dd>
+<dd><p>Significance threshold; links with adjusted <code>p &gt; sig_level</code>
+are hidden.</p></dd>
 
 
 <dt id="arg-r-threshold">r_threshold<a class="anchor" aria-label="anchor" href="#arg-r-threshold"></a></dt>
@@ -159,23 +146,15 @@ are always excluded.</p></dd>
 
 
 <dt id="arg-method-use">method, use<a class="anchor" aria-label="anchor" href="#arg-method-use"></a></dt>
-<dd><p>Passed to <code><a href="compute_correlations.html">compute_correlations()</a></code> when <code>r</code> is raw data:
-the correlation method and the missing-value handling. Ignored otherwise.</p></dd>
+<dd><p>Passed to <code><a href="compute_correlations.html">compute_correlations()</a></code>: the correlation method
+and the missing-value handling.</p></dd>
 
 
 <dt id="arg-adjust">adjust<a class="anchor" aria-label="anchor" href="#arg-adjust"></a></dt>
 <dd><p>Multiple-comparison adjustment method applied to the raw
 p-values over the displayed family of correlations (see Details). Any
 method accepted by <code><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">stats::p.adjust()</a></code> (e.g. <code>"holm"</code>, <code>"hochberg"</code>,
-<code>"BH"</code>, <code>"bonferroni"</code>, <code>"none"</code>). Used only when the p-values are raw
-(raw-data or <code>"circlecor"</code> input); a user-supplied <code>p</code> matrix is taken as
-given.</p></dd>
-
-
-<dt id="arg-p-from">p_from<a class="anchor" aria-label="anchor" href="#arg-p-from"></a></dt>
-<dd><p>When a p-value matrix is asymmetric (as from <code>psych</code>), which
-triangle to mirror: <code>"lower"</code> (raw p-values, the default) or <code>"upper"</code>
-(adjusted).</p></dd>
+<code>"BH"</code>, <code>"bonferroni"</code>, <code>"none"</code>).</p></dd>
 
 
 <dt id="arg-r-limits">r_limits<a class="anchor" aria-label="anchor" href="#arg-r-limits"></a></dt>
@@ -258,16 +237,15 @@ the correlations you actually want to inspect – by default the
 <strong>between-category</strong> correlations, with self- and within-category
 correlations hidden.</p>
 <p>This is not only a display choice; it is carried through to the statistics.
-When the p-values are computed from raw data (or supplied via a
-<code><a href="compute_correlations.html">compute_correlations()</a></code> object), the multiple-comparison adjustment
-(<code>adjust</code>) is applied over <strong>only the family of correlations shown</strong> – i.e.
-excluding self- and, when <code>hide_within_group = TRUE</code>, within-category
-correlations. Because those redundant comparisons no longer count towards the
-family, the correction is less severe and statistical power improves.</p>
+The multiple-comparison adjustment (<code>adjust</code>) is applied over <strong>only the
+family of correlations shown</strong> – i.e. excluding self- and, when
+<code>hide_within_group = TRUE</code>, within-category correlations. Because those
+redundant comparisons no longer count towards the family, the correction is
+less severe and statistical power improves.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="corr_wheel_schemes.html">corr_wheel_schemes()</a></code>, <code><a href="corr_wheel_scheme.html">corr_wheel_scheme()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="compute_correlations.html">compute_correlations()</a></code>, <code><a href="corr_wheel_schemes.html">corr_wheel_schemes()</a></code>, <code><a href="corr_wheel_scheme.html">corr_wheel_scheme()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -280,22 +258,15 @@ family, the correction is less severe and statistical power improves.</p>
 <span class="r-in"><span>  Scores       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GCSI"</span>, <span class="st">"PAGI-SYM"</span>, <span class="st">"PAGI-QoL"</span>, <span class="st">"EQ-5D"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Simplest: straight from a per-row data frame (correlations computed for you)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">gastro_symptoms</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"psych"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="fu">corr_wheel</span><span class="op">(</span><span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">grp</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>,</span></span>
-<span class="r-in"><span>             r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="co"># `gastro_symptoms` is a synthetic example dataset bundled with the package</span></span></span>
+<span class="r-in"><span><span class="co"># (available directly after library(circlecorR) -- no need to call data()).</span></span></span>
+<span class="r-in"><span><span class="fu">corr_wheel</span><span class="op">(</span><span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">grp</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>,</span></span>
+<span class="r-in"><span>           r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="corr_wheel-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Or from pre-computed matrices / a circlecor object</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">gastro_cor</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">corr_wheel</span><span class="op">(</span><span class="va">gastro_cor</span>, groups <span class="op">=</span> <span class="va">grp</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>,</span></span>
-<span class="r-in"><span>           r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># A built-in colour scheme, with one category colour overridden</span></span></span>
-<span class="r-in"><span><span class="fu">corr_wheel</span><span class="op">(</span><span class="va">gastro_cor</span>, groups <span class="op">=</span> <span class="va">grp</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>, scheme <span class="op">=</span> <span class="st">"colorblind"</span>,</span></span>
-<span class="r-in"><span>           colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Scores <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">corr_wheel</span><span class="op">(</span><span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">grp</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>,</span></span>
+<span class="r-in"><span>           scheme <span class="op">=</span> <span class="st">"colorblind"</span>, colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Scores <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="corr_wheel-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

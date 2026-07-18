@@ -94,26 +94,29 @@ and statistics configurable.</p>
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"kriz98/circlecorR"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><em>(CRAN release pending.)</em></p>
-<p><code>circlecorR</code> needs <code>circlize</code>;
-<code>psych</code> is only required if you let the package compute
-correlations for you (the raw-data path below).</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"circlize"</span>, <span class="st">"psych"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Dependencies (<code>circlize</code> and <code>psych</code>) install
+automatically with the command above.</p>
 </div>
 <div class="section level2">
 <h2 id="quick-start-straight-from-your-data">Quick start: straight from your data<a class="anchor" aria-label="anchor" href="#quick-start-straight-from-your-data"></a>
 </h2>
-<p>Most datasets have <strong>one row per subject</strong> and
-<strong>one column per variable</strong>. You do not need to build
-correlation matrices yourself – hand that data frame directly to
-<code><a href="../reference/corr_wheel.html">corr_wheel()</a></code> and it computes the correlations (and
-p-values) for you.</p>
+<p><code>circlecorR</code> is designed to work straight from a data
+frame – <strong>one row per subject</strong> and <strong>one column per
+variable</strong> – with no separate step to build correlation matrices
+yourself. Hand that data frame directly to <code><a href="../reference/corr_wheel.html">corr_wheel()</a></code> and
+it computes the correlations (and p-values) for you.</p>
 <p>The only other thing you supply is <code>groups</code>: a named list
 mapping each category to its variables. This both
 <strong>selects</strong> which variables appear (any other columns, such
 as an ID, are ignored) and sets their <strong>order</strong> around the
 wheel.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p><code>gastro_symptoms</code>, used throughout this vignette, is a
+synthetic example dataset bundled with the package. Because the package
+sets <code>LazyData: true</code>, it’s available directly as soon as you
+<code><a href="https://kriz98.github.io/circlecorR/">library(circlecorR)</a></code> – no <code><a href="https://rdrr.io/r/utils/data.html" class="external-link">data()</a></code> call needed.
+Swap it for your own data frame (one row per subject) to use your own
+data; see <code><a href="../reference/gastro_symptoms.html">?gastro_symptoms</a></code> for its exact shape.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  Demographics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Age"</span>, <span class="st">"BMI"</span><span class="op">)</span>,</span>
 <span>  Metrics      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Amplitude"</span>, <span class="st">"Fed-Fasted AR"</span>, <span class="st">"Frequency"</span>, <span class="st">"GA-RI"</span><span class="op">)</span>,</span>
@@ -121,7 +124,7 @@ wheel.</p>
 <span>                   <span class="st">"Upper GI pain"</span>, <span class="st">"Lower GI pain"</span>, <span class="st">"Heartburn"</span><span class="op">)</span>,</span>
 <span>  Scores       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GCSI"</span>, <span class="st">"PAGI-SYM"</span>, <span class="st">"PAGI-QoL"</span>, <span class="st">"EQ-5D"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># `gastro_symptoms` is a synthetic per-row example dataset shipped with the package</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">gastro_symptoms</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Age  BMI Amplitude Fed-Fasted AR Frequency</span></span>
@@ -160,11 +163,11 @@ family. <code><a href="../reference/corr_wheel.html">corr_wheel()</a></code> the
 <strong>only the correlations it displays</strong>. Shrinking the family
 makes the correction less severe – so power improves – while remaining
 statistically consistent with what is shown.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span><span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, adjust <span class="op">=</span> <span class="st">"hochberg"</span>,</span>
 <span>                  r_threshold <span class="op">=</span> <span class="fl">0.3</span>, r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="circlecorR_files/figure-html/family-1.png" class="r-plt" alt="" width="880" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">groups</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Unique correlations in the full matrix:"</span>, <span class="va">k</span> <span class="op">*</span> <span class="op">(</span><span class="va">k</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span>, <span class="st">"\n"</span><span class="op">)</span></span>
@@ -175,7 +178,7 @@ statistically consistent with what is shown.</p>
 smaller factor. Taking Bonferroni for a transparent example, the
 <em>same</em> correlation is penalised by the number of tests in its
 family – here 92 rather than 120:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_raw</span> <span class="op">&lt;-</span> <span class="fl">5e-4</span>                       <span class="co"># a raw p-value for one correlation</span></span>
 <span><span class="va">k_all</span> <span class="op">&lt;-</span> <span class="va">k</span> <span class="op">*</span> <span class="op">(</span><span class="va">k</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span></span>
 <span></span>
@@ -187,27 +190,25 @@ family – here 92 rather than 120:</p>
 <code>"BH"</code>) behave the same way: fewer comparisons never gives a
 larger adjusted p-value, so hiding redundant self- and within-category
 correlations can only help power.</p>
-<p>If you pass a <strong>pre-computed p-value matrix</strong> instead of
-raw data, it is taken as given (no re-adjustment), since it may already
-be corrected.</p>
-</div>
-<div class="section level2">
-<h2 id="other-inputs">Other inputs<a class="anchor" aria-label="anchor" href="#other-inputs"></a>
-</h2>
-<p><code><a href="../reference/corr_wheel.html">corr_wheel()</a></code> auto-detects what you pass:</p>
-<ul>
-<li>
-<strong>raw data</strong> (non-square) – correlations computed for
-you;</li>
-<li>a <strong>correlation matrix</strong> plus a matching <code>p</code>
-matrix;</li>
-<li>a <strong><code>circlecor</code></strong> object from
-<code><a href="../reference/compute_correlations.html">compute_correlations()</a></code>.</li>
-</ul>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"Rvalues.csv"</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"Pvalues.csv"</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span><span class="va">r</span>, <span class="va">p</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
+<p>If you want the correlation and p-value matrices themselves – for a
+table, a report, or any other purpose –
+<code><a href="../reference/compute_correlations.html">compute_correlations()</a></code> is the same function
+<code><a href="../reference/corr_wheel.html">corr_wheel()</a></code> calls internally, available on its own:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compute_correlations.html">compute_correlations</a></span><span class="op">(</span><span class="va">gastro_symptoms</span>, method <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">cc</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 4</span></span>
+<span><span class="co">#&gt;  $ r     : num [1:16, 1:16] 1 0.000715 -0.094705 -0.208429 -0.007022 ...</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span></span>
+<span><span class="co">#&gt;   .. ..$ : chr [1:16] "Age" "BMI" "Amplitude" "Fed-Fasted AR" ...</span></span>
+<span><span class="co">#&gt;   .. ..$ : chr [1:16] "Age" "BMI" "Amplitude" "Fed-Fasted AR" ...</span></span>
+<span><span class="co">#&gt;  $ p     : num [1:16, 1:16] 0 0.9944 0.3486 0.0374 0.9447 ...</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span></span>
+<span><span class="co">#&gt;   .. ..$ : chr [1:16] "Age" "BMI" "Amplitude" "Fed-Fasted AR" ...</span></span>
+<span><span class="co">#&gt;   .. ..$ : chr [1:16] "Age" "BMI" "Amplitude" "Fed-Fasted AR" ...</span></span>
+<span><span class="co">#&gt;  $ n     : num 100</span></span>
+<span><span class="co">#&gt;  $ method: chr "pearson"</span></span>
+<span><span class="co">#&gt;  - attr(*, "class")= chr "circlecor"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="customising-the-look">Customising the look<a class="anchor" aria-label="anchor" href="#customising-the-look"></a>
@@ -218,7 +219,7 @@ matrix;</li>
 <p><code>scheme</code> sets the category colours and the diverging link
 palette together, as one named preset. Built-in options are listed by
 <code><a href="../reference/corr_wheel_schemes.html">corr_wheel_schemes()</a></code>:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/corr_wheel_schemes.html">corr_wheel_schemes</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "default"    "colorblind" "ocean"      "vivid"      "alimetry"</span></span></code></pre></div>
 <ul>
@@ -238,18 +239,18 @@ palette, still paired with the blue-white-red diverging scale.</li>
 <code>"alimetry"</code> – blues alternating with warm golds, with a
 matching blue-to-yellow diverging scale.</li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span><span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>          r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span>, scheme <span class="op">=</span> <span class="st">"colorblind"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="circlecorR_files/figure-html/scheme-colorblind-1.png" class="r-plt" alt="" width="880" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span><span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>          r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span>, scheme <span class="op">=</span> <span class="st">"alimetry"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="circlecorR_files/figure-html/scheme-alimetry-1.png" class="r-plt" alt="" width="880" style="display: block; margin: auto;"></p>
 <p><code><a href="../reference/corr_wheel_scheme.html">corr_wheel_scheme()</a></code> returns a scheme’s definition so you
 can start from a preset and tweak it – here, lightening the midpoint of
 the diverging scale:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/corr_wheel_scheme.html">corr_wheel_scheme</a></span><span class="op">(</span><span class="st">"ocean"</span><span class="op">)</span></span>
 <span><span class="va">s</span><span class="op">$</span><span class="va">palette</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"grey96"</span></span>
 <span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span><span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -260,7 +261,7 @@ the diverging scale:</p>
 is an unnamed vector cycled across however many categories you have, and
 <code>palette</code> is the length-3 diverging scale (negative,
 midpoint, positive):</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span><span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>          r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span>,</span>
 <span>          scheme <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#7B2CBF"</span>, <span class="st">"#2A9D8F"</span>, <span class="st">"#E76F51"</span>, <span class="st">"#264653"</span><span class="op">)</span>,</span>
@@ -275,7 +276,7 @@ midpoint, positive):</p>
 <code>NULL</code>) – only the categories you name are overridden.
 <code>labels</code> gives pretty display names. Both are named vectors –
 specify only the ones you want to change.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span></span>
 <span>  <span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>, r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span>,</span>
 <span>  scheme <span class="op">=</span> <span class="st">"colorblind"</span>,</span>
@@ -295,7 +296,7 @@ specify only the ones you want to change.</p>
 <code>link_lwd</code> – <strong>line</strong> width of the links
 (larger = thicker).</li>
 </ul>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span></span>
 <span>  <span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>, r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span>,</span>
 <span>  tile_height <span class="op">=</span> <span class="fl">0.12</span>,   <span class="co"># thicker blocks</span></span>
@@ -309,7 +310,7 @@ specify only the ones you want to change.</p>
 <p><code>palette</code> sets the three colours at
 <code>c(-limit, 0, +limit)</code> (overriding <code>scheme</code>’s) and
 <code>r_limits</code> the scale range.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span></span>
 <span>  <span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>  palette  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#2166AC"</span>, <span class="st">"white"</span>, <span class="st">"#B2182B"</span><span class="op">)</span>,   <span class="co"># blue - white - red</span></span>
@@ -323,7 +324,7 @@ specify only the ones you want to change.</p>
 </h2>
 <p><code><a href="../reference/corr_wheel.html">corr_wheel()</a></code> draws on the active graphics device, so
 save it the usual way:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">png</a></span><span class="op">(</span><span class="st">"correlation_wheel.png"</span>, width <span class="op">=</span> <span class="fl">2500</span>, height <span class="op">=</span> <span class="fl">2000</span>, res <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span><span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>           r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span><span class="op">)</span></span>

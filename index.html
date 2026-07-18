@@ -16,8 +16,8 @@
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Circular Correlation Wheel Plots">
-<meta name="description" content='Draws circular "correlation wheel" plots (as popularised by the MNE Python library) natively in R. Variables are arranged around a circle, grouped and colour-tiled by category, and connected by curved links whose colour maps to the correlation coefficient. Non-significant, weak, and within-category correlations can be masked. Correlations can be supplied as pre-computed r/p matrices or computed from raw data via a thin wrapper around corr.test() from the psych package. Categories, colours, and labels are all user-configurable.'>
-<meta property="og:description" content='Draws circular "correlation wheel" plots (as popularised by the MNE Python library) natively in R. Variables are arranged around a circle, grouped and colour-tiled by category, and connected by curved links whose colour maps to the correlation coefficient. Non-significant, weak, and within-category correlations can be masked. Correlations can be supplied as pre-computed r/p matrices or computed from raw data via a thin wrapper around corr.test() from the psych package. Categories, colours, and labels are all user-configurable.'>
+<meta name="description" content='Draws circular "correlation wheel" plots (as popularised by the MNE Python library) natively in R, straight from a data frame of one row per observation. Variables are arranged around a circle, grouped and colour-tiled by category, and connected by curved links whose colour maps to the correlation coefficient, computed via a thin wrapper around corr.test() from the psych package. Non-significant, weak, and within-category correlations can be masked. Categories, colours, and labels are all user-configurable.'>
+<meta property="og:description" content='Draws circular "correlation wheel" plots (as popularised by the MNE Python library) natively in R, straight from a data frame of one row per observation. Variables are arranged around a circle, grouped and colour-tiled by category, and connected by curved links whose colour maps to the correlation coefficient, computed via a thin wrapper around corr.test() from the psych package. Non-significant, weak, and within-category correlations can be masked. Categories, colours, and labels are all user-configurable.'>
 <meta property="og:image" content="https://kriz98.github.io/circlecorR/logo.svg">
 </head>
 <body>
@@ -69,15 +69,13 @@
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"kriz98/circlecorR"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><em>(CRAN release pending.)</em></p>
-<p>It needs <code>circlize</code>; <code>psych</code> is only required if you let the package compute correlations for you (the raw-data path below).</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"circlize"</span>, <span class="st">"psych"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Dependencies (<code>circlize</code> and <code>psych</code>) install automatically with the command above.</p>
 </div>
 <div class="section level2">
 <h2 id="quick-start--straight-from-your-data">Quick start — straight from your data<a class="anchor" aria-label="anchor" href="#quick-start--straight-from-your-data"></a>
 </h2>
-<p>Most datasets are <strong>one row per subject, one column per variable</strong>. You don’t need to build correlation matrices yourself: hand that data frame to <code><a href="reference/corr_wheel.html">corr_wheel()</a></code> and it computes the correlations and p-values for you. The only other thing you supply is <code>groups</code>, which both selects the variables and orders them around the wheel (extra columns like IDs are ignored).</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p><code>circlecorR</code> is designed to work straight from a data frame – <strong>one row per subject, one column per variable</strong> – with no separate step to build correlation matrices yourself. Hand that data frame to <code><a href="reference/corr_wheel.html">corr_wheel()</a></code> and it computes the correlations and p-values for you. The only other thing you supply is <code>groups</code>, which both selects the variables and orders them around the wheel (extra columns like IDs are ignored).</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://kriz98.github.io/circlecorR/">circlecorR</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># `gastro_symptoms` is a synthetic example dataset bundled with the package --</span></span>
@@ -100,18 +98,9 @@
 <span>  r_limits    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="from-pre-computed-r--p-matrices-eg-existing-csvs">From pre-computed r / p matrices (e.g. existing CSVs)<a class="anchor" aria-label="anchor" href="#from-pre-computed-r--p-matrices-eg-existing-csvs"></a>
-</h3>
-<p><code><a href="reference/corr_wheel.html">corr_wheel()</a></code> auto-detects a correlation matrix, so the old two-file workflow still works:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"Rvalues.csv"</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"Pvalues.csv"</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span><span class="va">r</span>, <span class="va">p</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
 <h3 id="save-to-file">Save to file<a class="anchor" aria-label="anchor" href="#save-to-file"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">png</a></span><span class="op">(</span><span class="st">"correlation_wheel.png"</span>, width <span class="op">=</span> <span class="fl">2400</span>, height <span class="op">=</span> <span class="fl">2000</span>, res <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/corr_wheel.html">corr_wheel</a></span><span class="op">(</span><span class="va">gastro_symptoms</span>, groups <span class="op">=</span> <span class="va">groups</span>, r_threshold <span class="op">=</span> <span class="fl">0.3</span>, r_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.6</span>, <span class="fl">0.6</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -227,7 +216,7 @@
 <div class="section level2">
 <h2 id="example-data">Example data<a class="anchor" aria-label="anchor" href="#example-data"></a>
 </h2>
-<p><code>gastro_symptoms</code> (raw) and <code>gastro_cor</code> (an r/p <code>circlecor</code> object) are bundled <strong>synthetic</strong> datasets — fully simulated, not patient data — mimicking a gastric -symptom study. See <code><a href="reference/gastro_cor.html">?gastro_cor</a></code>.</p>
+<p><code>gastro_symptoms</code> is a bundled <strong>synthetic</strong> dataset — fully simulated, not patient data — mimicking a gastric-symptom study, one row per subject. It’s loaded automatically with the package (<code>LazyData: true</code>), so it’s available directly as soon as you <code><a href="https://kriz98.github.io/circlecorR/">library(circlecorR)</a></code> — no <code><a href="https://rdrr.io/r/utils/data.html" class="external-link">data()</a></code> call needed. See <code><a href="reference/gastro_symptoms.html">?gastro_symptoms</a></code> for details, or use it as a template for your own data’s shape.</p>
 </div>
 <div class="section level2">
 <h2 id="how-masking--statistics-work">How masking &amp; statistics work<a class="anchor" aria-label="anchor" href="#how-masking--statistics-work"></a>
@@ -240,7 +229,7 @@
 <li>
 <code>|r| &gt;= r_threshold</code>.</li>
 </ol>
-<p>The correlations left after step 1 form the <strong>family</strong> of comparisons. When the p-values are raw (computed from your data, or from a <code>circlecor</code> object), the <code>adjust</code> correction is applied over <strong>only that family</strong> — so redundant self- and within-category correlations don’t inflate the count, and power improves. A pre-computed <code>p</code> matrix is used as given. <code><a href="reference/corr_wheel.html">corr_wheel()</a></code> returns <code>n_tests</code> (the family size) and the family-adjusted p-matrix for reporting.</p>
+<p>The correlations left after step 1 form the <strong>family</strong> of comparisons. The <code>adjust</code> correction is applied over <strong>only that family</strong> — so redundant self- and within-category correlations don’t inflate the count, and power improves. <code><a href="reference/corr_wheel.html">corr_wheel()</a></code> returns <code>n_tests</code> (the family size) and the family-adjusted p-matrix for reporting.</p>
 </div>
 <div class="section level2">
 <h2 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
