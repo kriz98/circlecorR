@@ -35,13 +35,22 @@ relationships are buried in this redundancy and the figure becomes unreadable.
 
 The **correlation wheel** was introduced by Gharibans et al in the first clinical
 paper to show that spatial dysrhythmias as measured on the body surface, correlated
-with gastroduodenal symptoms [@gharibans2019]. The correlation wheel shows variables
+with gastroduodenal symptoms. The correlation wheel shows variables
 at the periphery of a circle, grouped by category, and only the
 correlations of interest are drawn as curved links coloured by the strength of their
 coefficient, and filtered based on custom statistical significance thresholds. 
 `circlecorR` reproduces these features to generate a correlation wheel plot using standard
 patient-per-row type dataframes in R, with optionality to customise the grouping, 
 colours, and statistics.
+
+Since then, several notable papers in the field of gastric electrophysiology
+have leveraged these plots, including:
+
+* Gharibans AA, Coleman TP, Mousa H, Kunkel DC. Spatial patterns from high-resolution electrogastrography correlate with severity of symptoms in patients with functional dyspepsia and gastroparesis. Clin Gastroenterol Hepatol. 2019 Dec;17(13):2668–77. DOI: [10.1016/j.cgh.2019.04.039](https://www.cghjournal.org/article/S1542-3565(19)30429-X/fulltext) 
+* Gharibans AA, Calder S, Varghese C, Waite S, Schamberg G, Daker C, et al. Gastric dysfunction in patients with chronic nausea and vomiting syndromes defined by a noninvasive gastric mapping device. Sci Transl Med. 2022 Sept 21;14(663):eabq3544. DOI: [10.1126/scitranslmed.abq3544](https://pmc.ncbi.nlm.nih.gov/articles/PMC10042458/)
+* Wang TH-H, Varghese C, Calder S, Gharibans A, Schamberg G, Bartlett A, et al. Long-term evaluation of gastric electrophysiology, symptoms and quality of life after pancreaticoduodenectomy. HPB (Oxford). 2025 Dec;27(12):1535–42. DOI: [10.1016/j.hpb.2025.09.003](https://doi.org/10.1016/j.hpb.2025.09.003)
+* Xu W, Wang T, Foong D, Schamberg G, Evennett N, Beban G, et al. Characterization of gastric dysfunction after fundoplication using body surface gastric mapping. J Gastrointest Surg. 2024 Mar;28(3):236–45. DOI: [10.1016/j.gassur.2023.12.023](https://doi.org/10.1016/j.gassur.2023.12.023)
+* Xu W, Gharibans AA, Calder S, Schamberg G, Walters A, Jang J, et al. Defining and phenotyping gastric abnormalities in long-term type 1 diabetes using a novel body surface gastric mapping device. Gastro Hep Adv. 2023 Aug 18;2(8):1120–32. DOI: [10.1016/j.gastha.2023.08.005](https://doi.org/10.1016/j.gastha.2023.08.005)
 
 ## Installation
 
@@ -70,14 +79,6 @@ In homage to Gharibans et al seminal paper, we use a synthetic `gastro_symptoms`
 dataset throughout this vignette (see `?gastro_symptoms` for its exact shape). 
 This synthetic example dataset is bundled with the package. Swap it for your own data 
 frame (one row per subject) to use your own data. 
-
-Other notable papers with where these figures were used include:
-
-* Gharibans AA, Coleman TP, Mousa H, Kunkel DC. Spatial patterns from high-resolution electrogastrography correlate with severity of symptoms in patients with functional dyspepsia and gastroparesis. Clin Gastroenterol Hepatol. 2019 Dec;17(13):2668–77.
-* Gharibans AA, Calder S, Varghese C, Waite S, Schamberg G, Daker C, et al. Gastric dysfunction in patients with chronic nausea and vomiting syndromes defined by a noninvasive gastric mapping device. Sci Transl Med. 2022 Sept 21;14(663):eabq3544.
-* Wang TH-H, Varghese C, Calder S, Gharibans A, Schamberg G, Bartlett A, et al. Long-term evaluation of gastric electrophysiology, symptoms and quality of life after pancreaticoduodenectomy. HPB (Oxford). 2025 Dec;27(12):1535–42.
-* Xu W, Wang T, Foong D, Schamberg G, Evennett N, Beban G, et al. Characterization of gastric dysfunction after fundoplication using body surface gastric mapping. J Gastrointest Surg. 2024 Mar;28(3):236–45.
-* Xu W, Gharibans AA, Calder S, Schamberg G, Walters A, Jang J, et al. Defining and phenotyping gastric abnormalities in long-term type 1 diabetes using a novel body surface gastric mapping device. Gastro Hep Adv. 2023 Aug 18;2(8):1120–32.
 
 ```{r groups}
 groups <- list(
