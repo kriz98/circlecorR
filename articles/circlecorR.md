@@ -34,7 +34,7 @@ electrophysiology have leveraged these plots, including:
   high-resolution electrogastrography correlate with severity of
   symptoms in patients with functional dyspepsia and gastroparesis. Clin
   Gastroenterol Hepatol. 2019 Dec;17(13):2668–77. DOI:
-  [10.1016/j.cgh.2019.04.039](https://www.cghjournal.org/article/S1542-3565(19)30429-X/fulltext)
+  [10.1016/j.cgh.2019.04.039](https://doi.org/10.1016/j.cgh.2019.04.039)
 - Gharibans AA, Calder S, Varghese C, Waite S, Schamberg G, Daker C, et
   al. Gastric dysfunction in patients with chronic nausea and vomiting
   syndromes defined by a noninvasive gastric mapping device. Sci Transl
