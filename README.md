@@ -1,6 +1,7 @@
 # circlecorR <img src="man/figures/logo.svg" align="right" height="139" alt="circlecorR logo" />
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/circlecorR)](https://CRAN.R-project.org/package=circlecorR)
 <!-- badges: end -->
 
 **Circular correlation "wheel" plots in native R.**
@@ -22,15 +23,21 @@ multiple-comparison family**, which improves statistical power (see
 
 ## Installation
 
+Install the released version from CRAN:
+
+```r
+install.packages("circlecorR")
+```
+
+Or the development version from GitHub:
+
 ```r
 # install.packages("remotes")
 remotes::install_github("kriz98/circlecorR", build_vignettes = TRUE)
 ```
 
-*(CRAN release pending.)*
-
-Dependencies (`circlize` and `psych`) install automatically with the command
-above.
+Dependencies (`circlize` and `psych`) install automatically with either
+command above.
 
 ## Quick start — straight from your data
 
