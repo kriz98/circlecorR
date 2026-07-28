@@ -58,15 +58,22 @@ electrophysiology have leveraged these plots, including:
 
 ## Installation
 
+Install the released version from CRAN:
+
+``` r
+
+install.packages("circlecorR")
+```
+
+Or the development version from GitHub:
+
 ``` r
 
 # install.packages("remotes")
 remotes::install_github("kriz98/circlecorR", build_vignettes = TRUE)
 ```
 
-*(CRAN release pending.)*
-
-Dependencies (`circlize` and `psych`) install automatically with the
+Dependencies (`circlize` and `psych`) install automatically with either
 command above.
 
 ## Quick start: straight from your data
