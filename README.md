@@ -1,7 +1,10 @@
 # circlecorR <img src="man/figures/logo.svg" align="right" height="139" alt="circlecorR logo" />
 
 <!-- badges: start -->
-[![CRAN status](https://www.r-pkg.org/badges/version/circlecorR)](https://CRAN.R-project.org/package=circlecorR)
+[![CRAN status](https://img.shields.io/cran/v/circlecorR)](https://CRAN.R-project.org/package=circlecorR)
+[![CRAN downloads (monthly)](https://cranlogs.r-pkg.org/badges/circlecorR)](https://CRAN.R-project.org/package=circlecorR)
+[![CRAN downloads (total)](https://cranlogs.r-pkg.org/badges/grand-total/circlecorR)](https://CRAN.R-project.org/package=circlecorR)
+[![R-CMD-check](https://github.com/kriz98/circlecorR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/kriz98/circlecorR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 **Circular correlation "wheel" plots in native R.**
